@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Dashboard" %} — TaskForge{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  <p class="tf-eyebrow mb-1">{% trans "Good morning" %}</p>
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+      <h1 class="display-5 fw-bold mb-1">{% trans "Here’s what’s happening today." %}</h1>
+      <p class="tf-muted mb-0">{% blocktrans with username=user.username %}Projects, tasks, and comments visible to {{ username }}.{% endblocktrans %}</p>
+    </div>
+    {% if user.is_admin or user.is_manager %}
+      <a class="tf-btn tf-btn-primary" href="{% url 'projects:create' %}">
+        <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-plus"/></svg>
+        {% trans "New project" %}
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="row g-3 mb-4" role="list" aria-label="{% trans "Workspace statistics" %}">
+    <div class="col-6 col-xl-3" role="listitem">
+      <div class="tf-stat-card tf-stat-projects">
+        <strong>{{ total_projects }}</strong>
+        <span>{% trans "Projects" %}</span>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3" role="listitem">
+      <div class="tf-stat-card tf-stat-tasks">
+        <strong>{{ total_tasks }}</strong>
+        <span>{% trans "Tasks" %}</span>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3" role="listitem">
+      <div class="tf-stat-card tf-stat-mine">
+        <strong>{{ my_tasks }}</strong>
+        <span>{% trans "My tasks" %}</span>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3" role="listitem">
+      <div class="tf-stat-card tf-stat-comments">
+        <strong>{{ total_comments }}</strong>
+        <span>{% trans "Comments" %}</span>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3" role="listitem">
+      <div class="tf-stat-card tf-stat-projects">
+        <strong>{{ completed_tasks }}</strong>
+        <span>{% trans "Completed" %}</span>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3" role="listitem">
+      <div class="tf-stat-card tf-stat-tasks">
+        <strong>{{ overdue_tasks }}</strong>
+        <span>{% trans "Overdue" %}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tf-card mb-4" aria-label="{% trans "Additional metrics coming soon" %}">
+    <div class="d-flex flex-wrap gap-3 justify-content-between">
+      <div>
+        <p class="tf-eyebrow mb-1">{% trans "Recent activity" %}</p>
+        <p class="fw-bold mb-0">{% trans "Feed" %} <span class="tf-muted">{% trans "soon" %}</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <section class="tf-card tf-card-accent-yellow h-100" aria-labelledby="recent-projects-heading">
+        <p class="tf-eyebrow">{% trans "Active projects" %}</p>
+        <h2 id="recent-projects-heading" class="h4">{% trans "Recent projects" %}</h2>
+        <ul class="list-group list-group-flush">
+          {% for project in recent_projects %}
+            <li class="list-group-item gap-2">
+              <div class="d-flex justify-content-between align-items-center gap-2">
+                <a class="fw-bold text-decoration-none" href="{% url 'projects:detail' project.pk %}">{{ project.name }}</a>
+                {% include "partials/status_badge.html" with status=project.status label=project.get_status_display %}
+              </div>
+              {% if project.total_tasks %}
+                <div class="tf-progress mt-2" role="progressbar" aria-valuenow="{% widthratio project.done_tasks project.total_tasks 100 %}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ project.name }} {% trans "progress" %}">
+                  <span style="width: {% widthratio project.done_tasks project.total_tasks 100 %}%;"></span>
+                </div>
+                <small class="tf-muted">{% blocktrans with done=project.done_tasks total=project.total_tasks %}{{ done }}/{{ total }} tasks done{% endblocktrans %}</small>
+              {% else %}
+                <small class="tf-muted">{% trans "No tasks yet" %}</small>
+              {% endif %}
+            </li>
+          {% empty %}
+            <li class="list-group-item tf-muted">{% trans "No projects yet." %}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+    <div class="col-lg-6">
+      <section class="tf-card tf-card-accent-blue h-100" aria-labelledby="open-tasks-heading">
+        <p class="tf-eyebrow">{% trans "Assigned work" %}</p>
+        <h2 id="open-tasks-heading" class="h4">{% trans "My open tasks" %}</h2>
+        <ul class="list-group list-group-flush">
+          {% for task in open_tasks %}
+            <li class="list-group-item d-flex justify-content-between align-items-center gap-2">
+              <a class="fw-bold text-decoration-none" href="{% url 'tasks:detail' task.project.pk task.pk %}">{{ task.title }}</a>
+              {% include "partials/status_badge.html" with status=task.status label=task.get_status_display %}
+            </li>
+          {% empty %}
+            <li class="list-group-item tf-muted">{% trans "No open tasks assigned to you." %}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+  </div>
+{% else %}
+  <div class="tf-card text-center px-4 py-5">
+    <p class="tf-eyebrow">TaskForge</p>
+    <h1 class="display-4 fw-bold">{% trans "A bold workspace for projects and tasks." %}</h1>
+    <p class="lead">{% trans "High-contrast boards, clear ownership, and no visual noise." %}</p>
+    <p class="d-flex flex-wrap justify-content-center gap-3 mb-0">
+      <a class="tf-btn tf-btn-primary" href="{% url 'users:login' %}">{% trans "Log in" %}</a>
+      <a class="tf-btn tf-btn-ghost" href="{% url 'users:register' %}">{% trans "Register" %}</a>
+    </p>
+  </div>
+{% endif %}
+{% endblock %}

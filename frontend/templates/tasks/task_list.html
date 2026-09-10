@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ project.name }} — {% trans "Tasks" %}{% endblock %}
+
+{% block content %}
+<div>
+  <nav aria-label="{% trans "Breadcrumb" %}">
+    <ol class="breadcrumb mb-3">
+      <li class="breadcrumb-item"><a href="{% url 'projects:list' %}">{% trans "Projects" %}</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'projects:detail' project.pk %}">{{ project.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{% trans "Tasks" %}</li>
+    </ol>
+  </nav>
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+      <p class="tf-eyebrow mb-1">{% trans "Task board" %}</p>
+      <h1 class="display-6 fw-bold mb-0">{% blocktrans with name=project.name %}{{ name }} tasks{% endblocktrans %}</h1>
+    </div>
+    {% if user.is_admin or user.is_manager %}
+      <a class="tf-btn tf-btn-primary" href="{% url 'tasks:create' project.pk %}">
+        <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-plus"/></svg>
+        {% trans "New task" %}
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+{% if tasks %}
+  <div class="tf-board">
+    <section class="tf-board-column" data-status="TODO" aria-labelledby="todo-heading">
+      <h2 id="todo-heading" class="tf-board-head">{% trans "Todo" %}</h2>
+      {% for task in tasks %}
+        {% if task.status == "TODO" %}
+          <article class="tf-task-card">
+            <h3><a class="text-decoration-none" href="{% url 'tasks:detail' project.pk task.pk %}">{{ task.title }}</a></h3>
+            {% include "partials/status_badge.html" with status=task.priority label=task.get_priority_display %}
+            <p class="small mt-2 mb-0">
+              <strong>{% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}{% trans "Unassigned" %}{% endif %}</strong>
+              {% if task.due_date %}<span class="tf-muted"> · {% trans "Due" %} {{ task.due_date }}</span>{% endif %}
+            </p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </section>
+
+    <section class="tf-board-column" data-status="IN_PROGRESS" aria-labelledby="in-progress-heading">
+      <h2 id="in-progress-heading" class="tf-board-head">{% trans "In progress" %}</h2>
+      {% for task in tasks %}
+        {% if task.status == "IN_PROGRESS" %}
+          <article class="tf-task-card">
+            <h3><a class="text-decoration-none" href="{% url 'tasks:detail' project.pk task.pk %}">{{ task.title }}</a></h3>
+            {% include "partials/status_badge.html" with status=task.priority label=task.get_priority_display %}
+            <p class="small mt-2 mb-0">
+              <strong>{% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}{% trans "Unassigned" %}{% endif %}</strong>
+              {% if task.due_date %}<span class="tf-muted"> · {% trans "Due" %} {{ task.due_date }}</span>{% endif %}
+            </p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </section>
+
+    <section class="tf-board-column" data-status="DONE" aria-labelledby="done-heading">
+      <h2 id="done-heading" class="tf-board-head">{% trans "Done" %}</h2>
+      {% for task in tasks %}
+        {% if task.status == "DONE" %}
+          <article class="tf-task-card">
+            <h3><a class="text-decoration-none" href="{% url 'tasks:detail' project.pk task.pk %}">{{ task.title }}</a></h3>
+            {% include "partials/status_badge.html" with status=task.priority label=task.get_priority_display %}
+            <p class="small mt-2 mb-0">
+              <strong>{% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}{% trans "Unassigned" %}{% endif %}</strong>
+              {% if task.due_date %}<span class="tf-muted"> · {% trans "Due" %} {{ task.due_date }}</span>{% endif %}
+            </p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </section>
+  </div>
+{% else %}
+  <div class="tf-empty">
+    <p class="fw-bold mb-0">{% trans "No tasks yet." %}</p>
+  </div>
+{% endif %}
+{% endblock %}

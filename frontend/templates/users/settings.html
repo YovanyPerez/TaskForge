@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Settings" %} — TaskForge{% endblock %}
+
+{% block content %}
+<p class="tf-eyebrow mb-1">{% trans "Workspace" %}</p>
+<h1 class="display-6 fw-bold mb-4">{% trans "Settings" %}</h1>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <section class="tf-card tf-card-accent-yellow h-100" aria-labelledby="language-heading">
+      <p class="tf-eyebrow">{% trans "Preferences" %}</p>
+      <h2 id="language-heading" class="h4">{% trans "Language" %}</h2>
+      <form method="post">
+        {% csrf_token %}
+        {% include "partials/form_fields.html" %}
+        <button type="submit" class="tf-btn tf-btn-primary mt-3">{% trans "Save" %}</button>
+      </form>
+    </section>
+  </div>
+  <div class="col-lg-6">
+    <section class="tf-card h-100" aria-labelledby="appearance-heading">
+      <p class="tf-eyebrow">{% trans "Preferences" %}</p>
+      <h2 id="appearance-heading" class="h4">{% trans "Appearance" %}</h2>
+      <p class="tf-muted small">{% trans "Saved in this browser only." %}</p>
+      <fieldset class="mb-3">
+        <legend class="tf-eyebrow">{% trans "Accent color" %}</legend>
+        <div class="d-flex flex-wrap gap-2" role="radiogroup" aria-label="{% trans "Accent color" %}">
+          <label class="tf-badge"><input type="radio" name="tf-accent" value="yellow" data-tf-accent-option class="me-1"> {% trans "Yellow" %}</label>
+          <label class="tf-badge"><input type="radio" name="tf-accent" value="blue" data-tf-accent-option class="me-1"> {% trans "Blue" %}</label>
+          <label class="tf-badge"><input type="radio" name="tf-accent" value="pink" data-tf-accent-option class="me-1"> {% trans "Pink" %}</label>
+          <label class="tf-badge"><input type="radio" name="tf-accent" value="green" data-tf-accent-option class="me-1"> {% trans "Green" %}</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend class="tf-eyebrow">{% trans "Density" %}</legend>
+        <div class="d-flex flex-wrap gap-2" role="radiogroup" aria-label="{% trans "Density" %}">
+          <label class="tf-badge"><input type="radio" name="tf-density" value="comfortable" data-tf-density-option class="me-1"> {% trans "Comfortable" %}</label>
+          <label class="tf-badge"><input type="radio" name="tf-density" value="compact" data-tf-density-option class="me-1"> {% trans "Compact" %}</label>
+        </div>
+      </fieldset>
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% if form.instance.pk %}{% trans "Edit project" %}{% else %}{% trans "New project" %}{% endif %} — TaskForge{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <section class="tf-card tf-card-accent-yellow" aria-labelledby="project-form-heading">
+      <p class="tf-eyebrow">{% trans "Project" %}</p>
+      <h1 id="project-form-heading" class="h3">{% if form.instance.pk %}{% trans "Edit project" %}{% else %}{% trans "New project" %}{% endif %}</h1>
+      <form method="post">
+        {% csrf_token %}
+        {% include "partials/form_fields.html" %}
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <button type="submit" class="tf-btn tf-btn-primary">{% trans "Save" %}</button>
+          <a class="tf-btn tf-btn-ghost" href="{% url 'projects:list' %}">{% trans "Cancel" %}</a>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% load i18n %}
+<form method="post" action="{% url 'users:switch-language' %}" class="d-flex gap-2 mt-3 align-items-end">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.path }}">
+  <div class="flex-grow-1">
+    <label class="tf-eyebrow" for="tf-language-select">{% trans "Language" %}</label>
+    <select id="tf-language-select" name="language" class="form-control form-select" onchange="this.form.submit()">
+      <option value="en"{% if request.LANGUAGE_CODE|slice:":2" == "en" %} selected{% endif %}>English</option>
+      <option value="es"{% if request.LANGUAGE_CODE|slice:":2" == "es" %} selected{% endif %}>Español</option>
+    </select>
+  </div>
+</form>

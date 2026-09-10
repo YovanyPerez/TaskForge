@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ task.title }} — TaskForge{% endblock %}
+
+{% block content %}
+<nav aria-label="{% trans "Breadcrumb" %}">
+  <ol class="breadcrumb mb-3">
+    <li class="breadcrumb-item"><a href="{% url 'projects:list' %}">{% trans "Projects" %}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'projects:detail' task.project.pk %}">{{ task.project.name }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'tasks:list' task.project.pk %}">{% trans "Tasks" %}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ task.title }}</li>
+  </ol>
+</nav>
+
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+  <div>
+    <p class="tf-eyebrow mb-1">{% trans "Task" %}</p>
+    <h1 class="display-6 fw-bold mb-2">{{ task.title }}</h1>
+    <div class="d-flex flex-wrap gap-2">
+      {% include "partials/status_badge.html" with status=task.status label=task.get_status_display %}
+      {% include "partials/status_badge.html" with status=task.priority label=task.get_priority_display %}
+    </div>
+    {% if user.pk == task.assigned_to_id %}
+      <form method="post" action="{% url 'tasks:status' task.project.pk task.pk %}" class="d-flex flex-wrap gap-2 mt-3 align-items-end">
+        {% csrf_token %}
+        <div>
+          <label class="tf-eyebrow" for="{{ status_form.status.id_for_label }}">{% trans "My status" %}</label>
+          {{ status_form.status }}
+        </div>
+        <button type="submit" class="tf-btn tf-btn-sm tf-btn-primary">{% trans "Update" %}</button>
+      </form>
+    {% endif %}
+  </div>
+  {% if user.is_admin or user.is_manager %}
+    <div class="d-flex flex-wrap gap-2">
+      <a class="tf-btn tf-btn-sm" href="{% url 'tasks:update' task.project.pk task.pk %}">{% trans "Edit" %}</a>
+      <a class="tf-btn tf-btn-sm tf-btn-danger" href="{% url 'tasks:delete' task.project.pk task.pk %}">{% trans "Delete" %}</a>
+    </div>
+  {% endif %}
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <section class="tf-card tf-card-accent-blue" aria-labelledby="task-details-heading">
+      <h2 id="task-details-heading" class="h4">{% trans "Details" %}</h2>
+      <p class="tf-muted">{{ task.description|default:_("No description yet.") }}</p>
+      <dl class="row mb-0">
+        <dt class="col-sm-4 text-uppercase">{% trans "Assigned to" %}</dt>
+        <dd class="col-sm-8 fw-bold">{{ task.assigned_to|default:_("Unassigned") }}</dd>
+        <dt class="col-sm-4 text-uppercase">{% trans "Due date" %}</dt>
+        <dd class="col-sm-8 fw-bold">{{ task.due_date|default:"—" }}</dd>
+        <dt class="col-sm-4 text-uppercase">{% trans "Created by" %}</dt>
+        <dd class="col-sm-8 fw-bold">{{ task.created_by|default:"—" }}</dd>
+      </dl>
+    </section>
+  </div>
+  <div class="col-lg-5">
+    <section aria-labelledby="comments-heading">
+      <h2 id="comments-heading" class="h4 mb-3">{% trans "Comments" %}</h2>
+      {% for comment in comments %}
+        <article class="tf-comment">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="tf-avatar tf-avatar-sm" aria-hidden="true">{{ comment.user.username|slice:":2"|upper }}</span>
+            <strong>{{ comment.user.username }}</strong>
+            <span class="tf-muted small ms-auto">{{ comment.created_at|date:"M j, Y H:i" }}</span>
+          </div>
+          <p class="mb-2">{{ comment.content }}</p>
+          {% if user == comment.user or user.is_admin or user.is_manager %}
+            <form method="post" action="{% url 'comments:delete' task.project.pk task.pk comment.pk %}" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="tf-btn tf-btn-sm tf-btn-ghost">{% trans "Delete" %}</button>
+            </form>
+          {% endif %}
+        </article>
+      {% empty %}
+        <div class="tf-empty mb-3">{% trans "No comments yet." %}</div>
+      {% endfor %}
+
+      <div class="tf-card">
+        <form method="post" action="{% url 'comments:add' task.project.pk task.pk %}">
+          {% csrf_token %}
+          <label class="tf-eyebrow" for="{{ comment_form.content.id_for_label }}">{% trans "Add a comment" %}</label>
+          {{ comment_form.content }}
+          <button type="submit" class="tf-btn tf-btn-primary mt-3 w-100">{% trans "Add comment" %}</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Tasks" %} — TaskForge{% endblock %}
+
+{% block content %}
+<p class="tf-eyebrow mb-1">{% trans "Workspace" %}</p>
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+  <h1 class="display-6 fw-bold mb-0">{% trans "Tasks" %}</h1>
+  <p class="tf-muted mb-0">{% trans "Every task in your visible projects." %}</p>
+</div>
+
+{% if tasks %}
+  <div class="tf-board">
+    <section class="tf-board-column" data-status="TODO" aria-labelledby="all-todo-heading">
+      <h2 id="all-todo-heading" class="tf-board-head">{% trans "Todo" %}</h2>
+      {% for task in tasks %}
+        {% if task.status == "TODO" %}
+          <article class="tf-task-card">
+            <h3><a class="text-decoration-none" href="{% url 'tasks:detail' task.project.pk task.pk %}">{{ task.title }}</a></h3>
+            <p class="small fw-bold mb-2">{{ task.project.name }}</p>
+            {% include "partials/status_badge.html" with status=task.priority label=task.get_priority_display %}
+            <p class="small mt-2 mb-0">
+              <strong>{% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}{% trans "Unassigned" %}{% endif %}</strong>
+              {% if task.due_date %}<span class="tf-muted"> · {% trans "Due" %} {{ task.due_date }}</span>{% endif %}
+            </p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </section>
+
+    <section class="tf-board-column" data-status="IN_PROGRESS" aria-labelledby="all-in-progress-heading">
+      <h2 id="all-in-progress-heading" class="tf-board-head">{% trans "In progress" %}</h2>
+      {% for task in tasks %}
+        {% if task.status == "IN_PROGRESS" %}
+          <article class="tf-task-card">
+            <h3><a class="text-decoration-none" href="{% url 'tasks:detail' task.project.pk task.pk %}">{{ task.title }}</a></h3>
+            <p class="small fw-bold mb-2">{{ task.project.name }}</p>
+            {% include "partials/status_badge.html" with status=task.priority label=task.get_priority_display %}
+            <p class="small mt-2 mb-0">
+              <strong>{% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}{% trans "Unassigned" %}{% endif %}</strong>
+              {% if task.due_date %}<span class="tf-muted"> · {% trans "Due" %} {{ task.due_date }}</span>{% endif %}
+            </p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </section>
+
+    <section class="tf-board-column" data-status="DONE" aria-labelledby="all-done-heading">
+      <h2 id="all-done-heading" class="tf-board-head">{% trans "Done" %}</h2>
+      {% for task in tasks %}
+        {% if task.status == "DONE" %}
+          <article class="tf-task-card">
+            <h3><a class="text-decoration-none" href="{% url 'tasks:detail' task.project.pk task.pk %}">{{ task.title }}</a></h3>
+            <p class="small fw-bold mb-2">{{ task.project.name }}</p>
+            {% include "partials/status_badge.html" with status=task.priority label=task.get_priority_display %}
+            <p class="small mt-2 mb-0">
+              <strong>{% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}{% trans "Unassigned" %}{% endif %}</strong>
+              {% if task.due_date %}<span class="tf-muted"> · {% trans "Due" %} {{ task.due_date }}</span>{% endif %}
+            </p>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </section>
+  </div>
+{% else %}
+  <div class="tf-empty">
+    <p class="fw-bold mb-0">{% trans "No tasks yet." %}</p>
+  </div>
+{% endif %}
+{% endblock %}

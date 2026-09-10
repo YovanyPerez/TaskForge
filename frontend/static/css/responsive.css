@@ -1,0 +1,74 @@
+@media (max-width: 991.98px) {
+  .tf-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .tf-sidebar {
+    height: auto;
+    position: static;
+    border-right: 0;
+    border-bottom: var(--tf-border);
+    overflow: visible;
+  }
+
+  .tf-content {
+    padding: 1.5rem 1rem 2.5rem;
+  }
+
+  .tf-topbar {
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .tf-search {
+    order: 3;
+    width: 100%;
+  }
+
+  .tf-board {
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-auto-columns: minmax(17rem, 82vw);
+    overflow-x: auto;
+    padding-bottom: 0.75rem;
+    scroll-snap-type: x mandatory;
+  }
+
+  .tf-board-column {
+    scroll-snap-align: start;
+  }
+
+  .tf-btn {
+    min-height: 3.25rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .tf-stat-card strong {
+    font-size: 2.1rem;
+  }
+
+  .tf-topbar {
+    gap: 0.65rem;
+  }
+
+  .tf-content .d-flex.justify-content-between {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 0.75rem;
+  }
+
+  .tf-content .d-flex.justify-content-between .btn,
+  .tf-content .d-flex.justify-content-between .tf-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

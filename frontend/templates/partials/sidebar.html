@@ -1,0 +1,59 @@
+{% load i18n %}
+<a class="tf-brand" href="{% url 'home' %}">
+  <span class="tf-brand-mark">TASKFORGE</span>
+  <span class="tf-brand-sub">{% trans "Project Management" %}</span>
+</a>
+
+{% if user.is_authenticated %}
+  <p class="tf-eyebrow mt-4 mb-2">{% trans "Workspace" %}</p>
+  <nav class="tf-nav" aria-label="{% trans "Primary" %}">
+    <a class="tf-nav-link {% if request.resolver_match.url_name == 'home' %}is-active{% endif %}" href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% endif %}>
+      <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-dashboard"/></svg>
+      {% trans "Dashboard" %}
+    </a>
+    <a class="tf-nav-link {% if request.resolver_match.namespace == 'projects' %}is-active{% endif %}" href="{% url 'projects:list' %}" {% if request.resolver_match.namespace == 'projects' %}aria-current="page"{% endif %}>
+      <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-projects"/></svg>
+      {% trans "Projects" %}
+    </a>
+    <a class="tf-nav-link {% if request.resolver_match.url_name == 'tasks-board' or request.resolver_match.namespace == 'tasks' %}is-active{% endif %}" href="{% url 'tasks-board' %}" {% if request.resolver_match.url_name == 'tasks-board' or request.resolver_match.namespace == 'tasks' %}aria-current="page"{% endif %}>
+      <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-tasks"/></svg>
+      {% trans "Tasks" %}
+    </a>
+    <a class="tf-nav-link {% if request.resolver_match.url_name == 'team-list' or request.resolver_match.url_name == 'team-detail' %}is-active{% endif %}" href="{% url 'users:team-list' %}" {% if request.resolver_match.url_name == 'team-list' or request.resolver_match.url_name == 'team-detail' %}aria-current="page"{% endif %}>
+      <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-team"/></svg>
+      {% trans "Team" %}
+    </a>
+    <a class="tf-nav-link {% if request.resolver_match.url_name == 'reports' %}is-active{% endif %}" href="{% url 'reports' %}" {% if request.resolver_match.url_name == 'reports' %}aria-current="page"{% endif %}>
+      <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-reports"/></svg>
+      {% trans "Reports" %}
+    </a>
+    <a class="tf-nav-link {% if request.resolver_match.url_name == 'settings' %}is-active{% endif %}" href="{% url 'users:settings' %}" {% if request.resolver_match.url_name == 'settings' %}aria-current="page"{% endif %}>
+      <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-settings"/></svg>
+      {% trans "Settings" %}
+    </a>
+  </nav>
+
+  <div class="tf-sidebar-account">
+    <a class="tf-nav-link {% if request.resolver_match.namespace == 'users' and request.resolver_match.url_name == 'profile' %}is-active{% endif %}" href="{% url 'users:profile' %}">
+      <span class="tf-avatar tf-avatar-sm" aria-hidden="true">{{ user.username|slice:":2"|upper }}</span>
+      {{ user.username }}
+    </a>
+    {% if user.is_staff %}
+      <a class="tf-nav-link {% if '/admin/' in request.path %}is-active{% endif %}" href="{% url 'admin:index' %}">
+        {% trans "Admin" %}
+      </a>
+    {% endif %}
+    <form method="post" action="{% url 'users:logout' %}" class="m-0">
+      {% csrf_token %}
+      <button type="submit" class="tf-nav-link w-100 text-start">
+        <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-logout"/></svg>
+        {% trans "Log out" %}
+      </button>
+    </form>
+  </div>
+  {% include "partials/language_switcher.html" %}
+{% else %}
+  <p class="tf-eyebrow mt-4 mb-2">{% trans "Welcome" %}</p>
+  <p class="tf-muted small mb-0">{% trans "Log in to open your dashboard, projects, and tasks." %}</p>
+  {% include "partials/language_switcher.html" %}
+{% endif %}

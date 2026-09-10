@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Register" %} — TaskForge{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <section class="tf-card tf-card-accent-green" aria-labelledby="register-heading">
+      <p class="tf-eyebrow">{% trans "Join TaskForge" %}</p>
+      <h1 id="register-heading" class="h3">{% trans "Create account" %}</h1>
+      <form method="post">
+        {% csrf_token %}
+        {% include "partials/form_fields.html" %}
+        <button type="submit" class="tf-btn tf-btn-primary w-100 mt-3">{% trans "Register" %}</button>
+      </form>
+      <p class="tf-muted small mt-3 mb-0">{% trans "Already have an account?" %} <a href="{% url 'users:login' %}">{% trans "Log in" %}</a></p>
+    </section>
+  </div>
+</div>
+{% endblock %}

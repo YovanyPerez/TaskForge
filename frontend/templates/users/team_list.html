@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Team" %} — TaskForge{% endblock %}
+
+{% block content %}
+<p class="tf-eyebrow mb-1">{% trans "Workspace" %}</p>
+<h1 class="display-6 fw-bold mb-4">{% trans "Team" %}</h1>
+
+{% if members %}
+  <div class="row g-4">
+    {% for member in members %}
+      <div class="col-md-6 col-xl-4">
+        <article class="tf-card h-100">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="tf-avatar tf-avatar-sm" aria-hidden="true">{{ member.username|slice:":2"|upper }}</span>
+            <h2 class="h5 mb-0">
+              <a class="text-decoration-none" href="{% url 'users:team-detail' member.pk %}">{{ member.username }}</a>
+            </h2>
+          </div>
+          {% include "partials/status_badge.html" with status=member.role label=member.get_role_display %}
+          <dl class="row small mt-3 mb-0">
+            <dt class="col-6 text-uppercase">{% trans "Projects" %}</dt>
+            <dd class="col-6 fw-bold">{{ member.project_count }}</dd>
+            <dt class="col-6 text-uppercase">{% trans "Open tasks" %}</dt>
+            <dd class="col-6 fw-bold">{{ member.open_task_count }}</dd>
+          </dl>
+        </article>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="tf-empty">
+    <p class="fw-bold mb-0">{% trans "No teammates yet." %}</p>
+  </div>
+{% endif %}
+{% endblock %}

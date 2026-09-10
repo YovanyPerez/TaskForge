@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Profile" %} — TaskForge{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <section class="tf-card tf-card-accent-blue" aria-labelledby="profile-heading">
+      <p class="tf-eyebrow">{% trans "Account" %}</p>
+      <h1 id="profile-heading" class="h3">{% trans "Profile" %}</h1>
+      <p class="small mb-3">
+        {% include "partials/status_badge.html" with status=user.role|default:"MEMBER" label=user.get_role_display %}
+        <strong class="ms-2">@{{ user.username }}</strong>
+      </p>
+      <form method="post">
+        {% csrf_token %}
+        {% include "partials/form_fields.html" %}
+        <button type="submit" class="tf-btn tf-btn-primary w-100 mt-3">{% trans "Save" %}</button>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

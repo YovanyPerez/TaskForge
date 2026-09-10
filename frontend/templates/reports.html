@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Reports" %} — TaskForge{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  <p class="tf-eyebrow mb-1">{% trans "Workspace" %}</p>
+  <h1 class="display-6 fw-bold mb-4">{% trans "Reports" %}</h1>
+
+  <section class="tf-card tf-card-accent-yellow mb-4" aria-labelledby="health-heading">
+    <p class="tf-eyebrow">{% trans "Projects" %}</p>
+    <h2 id="health-heading" class="h4">{% trans "Project health" %}</h2>
+    <div class="table-responsive">
+      <table class="table tf-table mb-0">
+        <thead>
+          <tr>
+            <th scope="col">{% trans "Project" %}</th>
+            <th scope="col">{% trans "Status" %}</th>
+            <th scope="col">{% trans "Progress" %}</th>
+            <th scope="col">{% trans "Open" %}</th>
+            <th scope="col">{% trans "Overdue" %}</th>
+            <th scope="col">{% trans "Unassigned" %}</th>
+            <th scope="col">{% trans "Members" %}</th>
+            <th scope="col">{% trans "Due date" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in project_health %}
+            <tr>
+              <td><a class="fw-bold text-decoration-none" href="{% url 'projects:detail' project.pk %}">{{ project.name }}</a></td>
+              <td>{% include "partials/status_badge.html" with status=project.status label=project.get_status_display %}</td>
+              <td>
+                {% if project.total_tasks %}
+                  <div class="tf-progress" role="progressbar" aria-valuenow="{% widthratio project.done_tasks project.total_tasks 100 %}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ project.name }} progress">
+                    <span style="width: {% widthratio project.done_tasks project.total_tasks 100 %}%;"></span>
+                  </div>
+                  <small class="tf-muted">{{ project.done_tasks }}/{{ project.total_tasks }}</small>
+                {% else %}
+                  <small class="tf-muted">{% trans "No tasks" %}</small>
+                {% endif %}
+              </td>
+              <td class="fw-bold">{{ project.open_tasks }}</td>
+              <td class="fw-bold">{{ project.overdue_tasks }}</td>
+              <td class="fw-bold">{{ project.unassigned_tasks }}</td>
+              <td class="fw-bold">{{ project.member_count }}</td>
+              <td>{{ project.end_date|default:"—" }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="8" class="tf-muted">{% trans "No projects to report on." %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="row g-4 mb-4">
+    <div class="col-lg-6">
+      <section class="tf-card h-100" aria-labelledby="status-dist-heading">
+        <p class="tf-eyebrow">{% trans "Tasks" %}</p>
+        <h2 id="status-dist-heading" class="h4">{% trans "By status" %}</h2>
+        {% for row in tasks_by_status %}
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center gap-2 mb-1">
+              <span class="tf-badge tf-status-{{ row.key }}">{{ row.label }}</span>
+              <strong>{{ row.count }}</strong>
+            </div>
+            <div class="tf-progress" role="img" aria-label="{% blocktrans with label=row.label total=row.count pct=row.pct %}{{ label }}: {{ total }} tasks ({{ pct }}%){% endblocktrans %}"><span style="width: {{ row.pct }}%;"></span></div>
+          </div>
+        {% endfor %}
+      </section>
+    </div>
+    <div class="col-lg-6">
+      <section class="tf-card h-100" aria-labelledby="priority-dist-heading">
+        <p class="tf-eyebrow">{% trans "Tasks" %}</p>
+        <h2 id="priority-dist-heading" class="h4">{% trans "By priority" %}</h2>
+        {% for row in tasks_by_priority %}
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center gap-2 mb-1">
+              <span class="tf-badge tf-status-{{ row.key }}">{{ row.label }}</span>
+              <strong>{{ row.count }}</strong>
+            </div>
+            <div class="tf-progress" role="img" aria-label="{% blocktrans with label=row.label total=row.count pct=row.pct %}{{ label }}: {{ total }} tasks ({{ pct }}%){% endblocktrans %}"><span style="width: {{ row.pct }}%;"></span></div>
+          </div>
+        {% endfor %}
+      </section>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-lg-6">
+      <section class="tf-card h-100" aria-labelledby="overdue-heading">
+        <p class="tf-eyebrow">{% trans "Attention" %}</p>
+        <h2 id="overdue-heading" class="h4">{% trans "Overdue" %}</h2>
+        <ul class="list-group list-group-flush">
+          {% for task in overdue_list %}
+            <li class="list-group-item">
+              <a class="fw-bold text-decoration-none" href="{% url 'tasks:detail' task.project.pk task.pk %}">{{ task.title }}</a>
+              <small class="tf-muted d-block">{{ task.project.name }} · {% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}{% trans "Unassigned" %}{% endif %} · {% trans "Due" %} {{ task.due_date }}</small>
+            </li>
+          {% empty %}
+            <li class="list-group-item tf-muted">{% trans "Nothing overdue." %}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+    <div class="col-lg-6">
+      <section class="tf-card h-100" aria-labelledby="atrisk-heading">
+        <p class="tf-eyebrow">{% trans "Attention" %}</p>
+        <h2 id="atrisk-heading" class="h4">{% trans "Due within 7 days" %}</h2>
+        <ul class="list-group list-group-flush">
+          {% for task in at_risk_list %}
+            <li class="list-group-item">
+              <a class="fw-bold text-decoration-none" href="{% url 'tasks:detail' task.project.pk task.pk %}">{{ task.title }}</a>
+              <small class="tf-muted d-block">{{ task.project.name }} · {% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}{% trans "Unassigned" %}{% endif %} · {% trans "Due" %} {{ task.due_date }}</small>
+            </li>
+          {% empty %}
+            <li class="list-group-item tf-muted">{% trans "Nothing due in the next 7 days." %}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <section class="tf-card h-100" aria-labelledby="workload-heading">
+        <p class="tf-eyebrow">{% trans "People" %}</p>
+        <h2 id="workload-heading" class="h4">{% trans "Workload by member" %}</h2>
+        <div class="table-responsive">
+          <table class="table tf-table mb-0">
+            <thead>
+              <tr>
+                <th scope="col">{% trans "Member" %}</th>
+                <th scope="col">{% trans "Open" %}</th>
+                <th scope="col">{% trans "Done" %}</th>
+                <th scope="col">{% trans "Overdue" %}</th>
+                <th scope="col">{% trans "Comments" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for member in workload %}
+                <tr>
+                  <td><a class="fw-bold text-decoration-none" href="{% url 'users:team-detail' member.pk %}">{{ member.username }}</a></td>
+                  <td class="fw-bold">{{ member.assigned_open }}</td>
+                  <td class="fw-bold">{{ member.assigned_done }}</td>
+                  <td class="fw-bold">{{ member.assigned_overdue }}</td>
+                  <td class="fw-bold">{{ member.comment_count }}</td>
+                </tr>
+              {% empty %}
+                <tr><td colspan="5" class="tf-muted">{% trans "No members to report on." %}</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <div class="col-lg-6">
+      <section class="tf-card tf-card-accent-green h-100" aria-labelledby="activity-heading">
+        <p class="tf-eyebrow">{% trans "People" %}</p>
+        <h2 id="activity-heading" class="h4">{% trans "Activity, last 30 days" %}</h2>
+        <ul class="list-group list-group-flush">
+          {% for member in activity %}
+            <li class="list-group-item d-flex justify-content-between align-items-center gap-2">
+              <a class="fw-bold text-decoration-none" href="{% url 'users:team-detail' member.pk %}">{{ member.username }}</a>
+              <small class="tf-muted">{% blocktrans with done=member.recent_done comments=member.recent_comments %}{{ done }} done · {{ comments }} comments{% endblocktrans %}</small>
+            </li>
+          {% empty %}
+            <li class="list-group-item tf-muted">{% trans "No recent activity." %}</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+  </div>
+{% else %}
+  <div class="tf-card text-center px-4 py-5">
+    <p class="tf-eyebrow">TaskForge</p>
+    <h1 class="display-4 fw-bold">{% trans "Reports require login." %}</h1>
+    <p>
+      <a class="tf-btn tf-btn-primary" href="{% url 'users:login' %}">{% trans "Log in" %}</a>
+      <a class="tf-btn tf-btn-ghost" href="{% url 'users:register' %}">{% trans "Register" %}</a>
+    </p>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% load i18n %}
+<button class="tf-btn tf-btn-sm d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tfSidebar" aria-expanded="false" aria-controls="tfSidebar">
+  {% trans "Menu" %}
+</button>
+<a class="tf-brand-mark text-decoration-none d-lg-none" href="{% url 'home' %}">TASKFORGE</a>
+
+<div class="d-flex align-items-center gap-2 ms-auto">
+  <button class="tf-icon-button" type="button" disabled aria-disabled="true" title="{% trans "Notifications (coming soon)" %}">
+    <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-bell"/></svg>
+    <span class="visually-hidden">{% trans "Notifications coming soon" %}</span>
+  </button>
+  {% if user.is_authenticated %}
+    <a class="d-flex align-items-center gap-2 text-decoration-none" href="{% url 'users:profile' %}">
+      <span class="tf-avatar tf-avatar-sm" aria-hidden="true">{{ user.username|slice:":2"|upper }}</span>
+      <span>
+        <strong class="d-block lh-1">{{ user.username }}</strong>
+        <small class="tf-muted lh-1">{{ user.get_role_display }}</small>
+      </span>
+    </a>
+  {% endif %}
+</div>

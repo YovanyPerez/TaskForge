@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Change task status" %} — TaskForge{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <section class="tf-card tf-card-accent-blue" aria-labelledby="task-status-heading">
+      <p class="tf-eyebrow">{% trans "Task" %}</p>
+      <h1 id="task-status-heading" class="h3">{% blocktrans with title=form.instance.title %}Change status: {{ title }}{% endblocktrans %}</h1>
+      <form method="post">
+        {% csrf_token %}
+        {% include "partials/form_fields.html" %}
+        <div class="d-flex flex-wrap gap-2 mt-3">
+          <button type="submit" class="tf-btn tf-btn-primary">{% trans "Save" %}</button>
+          <a class="tf-btn tf-btn-ghost" href="{% url 'tasks:detail' form.instance.project_id form.instance.pk %}">{% trans "Cancel" %}</a>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock %}

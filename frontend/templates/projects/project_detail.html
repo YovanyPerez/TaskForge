@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ project.name }} — TaskForge{% endblock %}
+
+{% block content %}
+<p class="tf-eyebrow mb-1">{% trans "Project" %}</p>
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+  <div>
+    <h1 class="display-6 fw-bold mb-2">{{ project.name }}</h1>
+    {% include "partials/status_badge.html" with status=project.status label=project.get_status_display %}
+  </div>
+  <div class="d-flex flex-wrap gap-2">
+    <a class="tf-btn tf-btn-sm tf-btn-ghost" href="{% url 'tasks:list' project.pk %}">{% trans "Tasks" %}</a>
+    {% if user.is_admin or user.is_manager %}
+      <a class="tf-btn tf-btn-sm" href="{% url 'projects:update' project.pk %}">{% trans "Edit" %}</a>
+      <a class="tf-btn tf-btn-sm tf-btn-danger" href="{% url 'projects:delete' project.pk %}">{% trans "Delete" %}</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <section class="tf-card tf-card-accent-yellow h-100" aria-labelledby="project-overview-heading">
+      <h2 id="project-overview-heading" class="h4">{% trans "Overview" %}</h2>
+      <p class="tf-muted">{{ project.description|default:_("No description yet.") }}</p>
+      <dl class="row mb-0">
+        <dt class="col-sm-4 text-uppercase">{% trans "Start date" %}</dt>
+        <dd class="col-sm-8 fw-bold">{{ project.start_date|default:"—" }}</dd>
+        <dt class="col-sm-4 text-uppercase">{% trans "End date" %}</dt>
+        <dd class="col-sm-8 fw-bold">{{ project.end_date|default:"—" }}</dd>
+        <dt class="col-sm-4 text-uppercase">{% trans "Created by" %}</dt>
+        <dd class="col-sm-8 fw-bold">{{ project.created_by|default:"—" }}</dd>
+        <dt class="col-sm-4 text-uppercase">{% trans "Tasks" %}</dt>
+        <dd class="col-sm-8 fw-bold">{{ project.tasks.count }}</dd>
+      </dl>
+    </section>
+  </div>
+  <div class="col-lg-5">
+    <section class="tf-card h-100" aria-labelledby="project-members-heading">
+      <h2 id="project-members-heading" class="h4">{% trans "Members" %}</h2>
+      {% if user.is_admin or user.is_manager %}
+        <form method="post" action="{% url 'projects:members-add' project.pk %}" class="d-flex gap-2 mb-3">
+          {% csrf_token %}
+          {{ member_form.user }}
+          <button type="submit" class="tf-btn tf-btn-sm tf-btn-primary">{% trans "Add" %}</button>
+        </form>
+      {% endif %}
+      <ul class="list-unstyled mb-0 d-grid gap-2">
+        {% for member in project.members.all %}
+          <li class="d-flex align-items-center gap-2 border border-2 border-dark p-2 bg-white">
+            <span class="tf-avatar tf-avatar-sm" aria-hidden="true">{{ member.username|slice:":2"|upper }}</span>
+            <span>
+              <strong class="d-block lh-1">{{ member.username }}</strong>
+              <small class="tf-muted lh-1">{% if member.is_admin %}{% trans "Admin" %}{% elif member.is_manager %}{% trans "Manager" %}{% else %}{% trans "Member" %}{% endif %}</small>
+            </span>
+            {% if user.is_admin or user.is_manager %}
+              <form method="post" action="{% url 'projects:members-remove' project.pk member.pk %}" class="ms-auto m-0">
+                {% csrf_token %}
+                <button type="submit" class="tf-btn tf-btn-sm tf-btn-ghost" aria-label="{% blocktrans with username=member.username %}Remove {{ username }}{% endblocktrans %}">{% trans "Remove" %}</button>
+              </form>
+            {% endif %}
+          </li>
+        {% empty %}
+          <li class="tf-muted">{% trans "No members yet." %}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+</div>
+{% endblock %}
