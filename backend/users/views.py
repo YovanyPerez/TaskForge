@@ -2,12 +2,11 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import translation
-from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.i18n import set_language as django_set_language
 
 from projects.models import Project
 from tasks.models import Task, TaskStatus
@@ -63,31 +62,19 @@ class SettingsView(LoginRequiredMixin, UpdateView):
 
 
 def switch_language(request):
-    """Switch interface language: session always, profile when logged in."""
-    if request.method != "POST":
-        return redirect("home")
-    language = request.POST.get("language", "")
-    valid = dict(settings.LANGUAGES)
-    if language not in valid:
-        language = "en"
-    translation.activate(language)
-    user = getattr(request, "user", None)
-    if getattr(user, "is_authenticated", False):
-        user.language = language
-        user.save(update_fields=["language", "updated_at"])
-    next_url = request.POST.get("next") or reverse_lazy("home")
-    if not url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
-        next_url = reverse_lazy("home")
-    response = redirect(next_url)
-    # LocaleMiddleware reads this cookie (same as Django's set_language view).
-    response.set_cookie(
-        settings.LANGUAGE_COOKIE_NAME,
-        language,
-        max_age=settings.LANGUAGE_COOKIE_AGE,
-        path=settings.LANGUAGE_COOKIE_PATH,
-        samesite=settings.LANGUAGE_COOKIE_SAMESITE,
-    )
-    return response
+    """Save the preference on the profile, then delegate to Django's own view
+    (it validates the language and sets the locale cookie)."""
+    if request.method == "POST":
+        language = request.POST.get("language", "")
+        if language not in dict(settings.LANGUAGES):
+            language = "en"
+            request.POST = request.POST.copy()
+            request.POST["language"] = language
+        user = getattr(request, "user", None)
+        if getattr(user, "is_authenticated", False) and user.language != language:
+            user.language = language
+            user.save(update_fields=["language", "updated_at"])
+    return django_set_language(request)
 
 
 class TeamListView(LoginRequiredMixin, ListView):

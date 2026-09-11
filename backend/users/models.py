@@ -29,9 +29,5 @@ class User(AbstractUser):
     def is_manager(self) -> bool:
         return self.role == Role.MANAGER
 
-    @property
-    def is_member(self) -> bool:
-        return self.role == Role.MEMBER
-
     def __str__(self) -> str:
         return self.username

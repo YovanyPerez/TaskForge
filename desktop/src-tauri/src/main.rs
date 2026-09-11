@@ -15,7 +15,6 @@ const CONNECT_TIMEOUT: Duration = Duration::from_secs(2);
 
 #[derive(serde::Deserialize)]
 struct ClientConfig {
-    server_url: Option<String>,
     #[serde(default)]
     server_urls: Vec<String>,
 }
@@ -48,18 +47,12 @@ fn candidate_urls() -> Vec<String> {
     if let Some(path) = config_path() {
         if let Ok(raw) = std::fs::read_to_string(path) {
             if let Ok(config) = serde_json::from_str::<ClientConfig>(&raw) {
-                let mut urls: Vec<String> = config
+                let urls: Vec<String> = config
                     .server_urls
                     .into_iter()
                     .map(|url| url.trim().to_string())
                     .filter(|url| !url.is_empty())
                     .collect();
-                if let Some(url) = config.server_url {
-                    let url = url.trim();
-                    if !url.is_empty() {
-                        urls.insert(0, url.to_string());
-                    }
-                }
                 if !urls.is_empty() {
                     return urls;
                 }
@@ -69,26 +62,17 @@ fn candidate_urls() -> Vec<String> {
     default_urls()
 }
 
-fn host_and_port(url: &str) -> Option<(String, u16)> {
-    let (scheme, rest) = url.split_once("://")?;
-    let default_port = if scheme.eq_ignore_ascii_case("http") {
-        80
-    } else {
-        443
-    };
-    let authority = rest.split(['/', '?', '#']).next()?;
-    let authority = authority.rsplit('@').next()?;
-    match authority.rsplit_once(':') {
-        Some((host, port)) => Some((host.to_string(), port.parse().ok()?)),
-        None => Some((authority.to_string(), default_port)),
-    }
-}
-
 fn is_reachable(url: &str) -> bool {
-    let Some((host, port)) = host_and_port(url) else {
+    let Ok(parsed) = Url::parse(url) else {
         return false;
     };
-    let Ok(addresses) = (host.as_str(), port).to_socket_addrs() else {
+    let Some(host) = parsed.host_str() else {
+        return false;
+    };
+    let Some(port) = parsed.port_or_known_default() else {
+        return false;
+    };
+    let Ok(addresses) = (host, port).to_socket_addrs() else {
         return false;
     };
     addresses
@@ -141,24 +125,8 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use super::{default_urls, host_and_port, parse_urls};
-
-    #[test]
-    fn parses_host_and_port() {
-        assert_eq!(
-            host_and_port("https://taskforge.ts.net"),
-            Some(("taskforge.ts.net".to_string(), 443))
-        );
-        assert_eq!(
-            host_and_port("http://10.0.0.5:8000/login/"),
-            Some(("10.0.0.5".to_string(), 8000))
-        );
-        assert_eq!(
-            host_and_port("https://user@host.ts.net:8443"),
-            Some(("host.ts.net".to_string(), 8443))
-        );
-        assert_eq!(host_and_port("not-a-url"), None);
-    }
+    use super::{default_urls, parse_urls};
+    use tauri::Url;
 
     #[test]
     fn parses_url_lists() {
@@ -170,11 +138,11 @@ mod tests {
     }
 
     #[test]
-    fn default_urls_are_parseable() {
+    fn default_urls_are_valid() {
         let urls = default_urls();
         assert!(!urls.is_empty());
         for url in urls {
-            assert!(host_and_port(&url).is_some(), "unparseable URL: {url}");
+            assert!(Url::parse(&url).is_ok(), "invalid URL: {url}");
         }
     }
 }

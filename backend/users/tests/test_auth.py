@@ -86,6 +86,6 @@ class RoleHelperTests(TestCase):
 
         self.assertTrue(admin.is_admin)
         self.assertTrue(manager.is_manager)
-        self.assertTrue(member.is_member)
+        self.assertTrue(member.role == Role.MEMBER)
         self.assertFalse(member.is_admin)
         self.assertFalse(manager.is_admin)

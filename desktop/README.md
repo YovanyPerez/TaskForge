@@ -32,10 +32,7 @@ mismo instalador sirve dentro de la oficina (LAN) y fuera (Tailscale):
 
 1. Variable de entorno `TASKFORGE_SERVER_URL` en tiempo de ejecución (una sola
    URL; útil en desarrollo).
-2. Archivo `taskforge.json` junto al `.exe`, con una URL o una lista:
-   ```json
-   { "server_url": "https://taskforge.tu-tailnet.ts.net" }
-   ```
+2. Archivo `taskforge.json` junto al `.exe`, con la lista de URLs:
    ```json
    { "server_urls": ["https://taskforge.tu-tailnet.ts.net", "http://MI-PC:8000"] }
    ```

@@ -163,7 +163,7 @@ Dockerfile builds the image (this may take a few minutes).
 
 - Django: http://localhost:8000
 - Django Admin: http://localhost:8000/admin
-- PostgreSQL: `localhost:5432` (mapped via `DATABASE_PORT`)
+- PostgreSQL: not published to the host (only `web` reaches it on the compose network); use `docker compose exec db psql -U taskforge` if you need a shell.
 
 `db` is bound to `127.0.0.1`; `web` is published on the LAN (so office clients
 can use it without a VPN). `web` runs `runserver --insecure` so static files are
@@ -294,7 +294,7 @@ docker compose start web
 - The client tries a list of server URLs and uses the first one that responds
   (Tailscale name first, then the LAN host/IP), so the same installer works
   inside the office and from outside. Override with a `taskforge.json` file
-  next to the `.exe` (`server_url` or `server_urls`).
+  next to the `.exe` (`server_urls`).
 - If no server responds, it shows an offline screen with a **Retry** button.
 
 ### Access from outside (Tailscale)

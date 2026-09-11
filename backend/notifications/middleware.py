@@ -1,5 +1,4 @@
 import threading
-from contextlib import contextmanager
 
 _thread_locals = threading.local()
 
@@ -9,17 +8,6 @@ def get_current_user():
     if user is not None and getattr(user, "is_authenticated", False):
         return user
     return None
-
-
-@contextmanager
-def current_user(user):
-    """Temporarily set the acting user (used by signals; handy in tests)."""
-    previous = getattr(_thread_locals, "user", None)
-    _thread_locals.user = user
-    try:
-        yield
-    finally:
-        _thread_locals.user = previous
 
 
 class CurrentUserMiddleware:

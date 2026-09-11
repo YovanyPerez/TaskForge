@@ -1,4 +1,5 @@
 from .models import Notification
+from .views import RECENT_LIMIT
 
 
 def notifications(request):
@@ -12,5 +13,5 @@ def notifications(request):
     )
     return {
         "unread_notifications": qs.count(),
-        "recent_notifications": list(qs[:8]),
+        "recent_notifications": list(qs[:RECENT_LIMIT]),
     }

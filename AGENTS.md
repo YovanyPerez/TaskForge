@@ -38,7 +38,7 @@
 ## Desktop client & remote access (Tailscale)
 - End-user usage (three modes: office browser, remote browser over Tailscale, desktop program) is documented in `README.md` → "How to use TaskForge"; install steps for the `.exe` are in `desktop/README.md`.
 - `desktop/` is a Tauri v2 Windows client (see `desktop/README.md`). It loads the web app in a WebView2 window and tries a list of server URLs (Tailscale first, then LAN), so one installer works inside and outside the office; it has its own URL test (`cargo test --release` in `desktop/src-tauri`).
-- Server URL precedence: runtime `TASKFORGE_SERVER_URL` → `taskforge.json` next to the `.exe` (`server_url` or `server_urls`) → defaults baked at build time from `TASKFORGE_SERVER_URLS` (comma-separated). Real deployment URLs are NOT committed; without the build variable the client falls back to a placeholder.
+- Server URL precedence: runtime `TASKFORGE_SERVER_URL` → `taskforge.json` next to the `.exe` (`server_urls`) → defaults baked at build time from `TASKFORGE_SERVER_URLS` (comma-separated). Real deployment URLs are NOT committed; without the build variable the client falls back to a placeholder.
 - Remote access uses `tailscale serve --bg --https=443 http://127.0.0.1:8000`; set `DJANGO_ALLOWED_HOSTS` + `CSRF_TRUSTED_ORIGINS` to the `*.ts.net` name. Office clients use the LAN directly (no Tailscale).
 - `db` (5432) is bound to `127.0.0.1`; `web` (8000) is published on the LAN. `web` runs `runserver --insecure` so static files work with `DEBUG=0`.
 - LAN access is plain HTTP, so `SESSION_COOKIE_SECURE` / `CSRF_COOKIE_SECURE` stay `0`; Tailscale traffic is still encrypted by WireGuard.

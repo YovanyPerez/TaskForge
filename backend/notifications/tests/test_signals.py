@@ -1,7 +1,8 @@
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from notifications.middleware import current_user
 from notifications.models import Notification, NotificationVerb
 from projects.models import Project
 from tasks.models import Task, TaskStatus
@@ -79,7 +80,7 @@ class NotificationSignalTests(TestCase):
             title="T1", project=self.project, created_by=self.manager
         )
         Notification.objects.all().delete()
-        with current_user(self.member):
+        with patch("notifications.signals.get_current_user", return_value=self.member):
             task.status = TaskStatus.DONE
             task.save()
         recipients = set(
@@ -115,7 +116,7 @@ class NotificationSignalTests(TestCase):
         self.assertIn(self.member.pk, recipients)
 
     def test_self_assignment_does_not_notify_actor(self):
-        with current_user(self.manager):
+        with patch("notifications.signals.get_current_user", return_value=self.manager):
             Task.objects.create(
                 title="T1",
                 project=self.project,
