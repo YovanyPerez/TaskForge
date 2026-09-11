@@ -214,6 +214,77 @@ created with `role=MEMBER`; set **Role = Admin** there to get admin powers.
 docker compose up
 ```
 
+## Deploy on a server
+
+The whole stack is plain Docker Compose, so it runs on any machine with Docker
+(a Linux server, mini PC, NAS or VPS) — nothing is tied to the development
+laptop. The server needs **Docker Engine + Compose v2** (on Linux you do not
+need Docker Desktop).
+
+1. Get the code on the server (private repo: invite the person as a
+   collaborator first):
+
+   ```bash
+   git clone https://github.com/YovanyPerez/TaskForge.git
+   cd TaskForge
+   ```
+
+   Or download the ZIP from GitHub (`Code → Download ZIP`) and extract it.
+
+2. Create the environment file and fill in real values:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   - `SECRET_KEY`: generate a new one, e.g.
+     `python -c "import secrets; print(secrets.token_urlsafe(50))"`.
+   - `DATABASE_*`: keep the defaults or change them before the first boot.
+   - `EMAIL_*` + `DEFAULT_FROM_EMAIL`: only needed for password reset.
+   - `DJANGO_ALLOWED_HOSTS` / `CSRF_TRUSTED_ORIGINS`: the server's IP/host and,
+     for remote access, its `*.ts.net` name.
+
+   **Never copy another installation's `.env`** — it contains secrets.
+
+3. Start it (migrations run automatically):
+
+   ```bash
+   docker compose up -d
+   ```
+
+   The app is then at `http://<server-ip>:8000`. For access from outside the
+   office, install Tailscale on the server (see
+   [Access from outside](#access-from-outside-tailscale)).
+
+### Moving existing data
+
+To bring projects/users from an old installation, stop the app on the new
+machine and dump/restore the database:
+
+```bash
+# old machine
+docker compose exec -T db sh -c \
+  'pg_dump --clean --if-exists -U "$POSTGRES_USER" "$POSTGRES_DB"' > taskforge.sql
+
+# new machine
+docker compose up -d
+docker compose stop web
+docker compose exec -T db sh -c \
+  'psql -U "$POSTGRES_USER" "$POSTGRES_DB"' < taskforge.sql
+docker compose start web
+```
+
+(`$POSTGRES_USER` / `$POSTGRES_DB` are expanded inside the `db` container.)
+
+### Server notes
+
+- `web` runs Django's development server (`runserver --insecure`). That is fine
+  for a small internal team; for heavier or public use, switch to `gunicorn`
+  plus a static-file server (whitenoise/nginx).
+- Schedule regular `pg_dump` backups (cron): the database lives in the
+  `postgres_data` Docker volume, so losing the disk without a backup loses all
+  data.
+
 ## Desktop client (Windows)
 
 `desktop/` contains a Tauri v2 wrapper that shows the app in a native window
