@@ -70,6 +70,32 @@ class TeamTests(TestCase):
         response = self.client.get(reverse("users:team-detail", args=[self.outsider.pk]))
         self.assertEqual(response.status_code, 200)
 
+    def test_manager_list_shows_member_projects(self):
+        self.client.force_login(self.manager)
+        response = self.client.get(reverse("users:team-list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Alpha")
+        self.assertContains(
+            response, reverse("projects:detail", args=[self.project.pk])
+        )
+
+    def test_member_list_hides_projects_not_shared(self):
+        hidden = Project.objects.create(name="Hidden", created_by=self.manager)
+        hidden.members.add(self.bob)
+        self.client.force_login(self.alice)
+        response = self.client.get(reverse("users:team-list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Alpha")
+        self.assertNotContains(response, "Hidden")
+
+    def test_member_project_count_only_counts_shared(self):
+        hidden = Project.objects.create(name="Hidden", created_by=self.manager)
+        hidden.members.add(self.bob)
+        self.client.force_login(self.alice)
+        response = self.client.get(reverse("users:team-list"))
+        bob = next(m for m in response.context["members"] if m.username == "bob")
+        self.assertEqual(len(bob.visible_projects), 1)
+
     def test_detail_shows_projects_and_tasks(self):
         self.client.force_login(self.bob)
         response = self.client.get(reverse("users:team-detail", args=[self.alice.pk]))

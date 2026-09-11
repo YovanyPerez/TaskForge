@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Q
+from django.db.models import Count, Prefetch, Q
 from django.urls import reverse_lazy
 from django.utils import translation
 from django.utils.translation import gettext as _
@@ -13,6 +13,7 @@ from tasks.models import Task, TaskStatus
 
 from .forms import UserProfileForm, UserRegistrationForm, UserSettingsForm
 from .models import User
+from .permissions import scope_to_member
 
 
 class RegisterView(CreateView):
@@ -87,14 +88,28 @@ class TeamListView(LoginRequiredMixin, ListView):
         qs = User.objects.all()
         if not (user.is_admin or user.is_manager):
             qs = qs.filter(projects__in=user.projects.all()).distinct()
-        return qs.annotate(
-            project_count=Count("projects", distinct=True),
-            open_task_count=Count(
-                "assigned_tasks",
-                filter=~Q(assigned_tasks__status=TaskStatus.DONE),
-                distinct=True,
-            ),
-        ).order_by("username")
+        visible_project_ids = scope_to_member(
+            Project.objects.all(), user, members=user
+        ).values("pk")
+        return (
+            qs.annotate(
+                open_task_count=Count(
+                    "assigned_tasks",
+                    filter=~Q(assigned_tasks__status=TaskStatus.DONE),
+                    distinct=True,
+                ),
+            )
+            .prefetch_related(
+                Prefetch(
+                    "projects",
+                    queryset=Project.objects.filter(
+                        pk__in=visible_project_ids
+                    ).order_by("name"),
+                    to_attr="visible_projects",
+                )
+            )
+            .order_by("username")
+        )
 
 
 class TeamDetailView(LoginRequiredMixin, DetailView):

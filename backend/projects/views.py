@@ -10,7 +10,7 @@ from users.mixins import ManagerOrAdminRequiredMixin
 from users.models import User
 from users.permissions import scope_to_member
 
-from .forms import ProjectForm, ProjectMemberForm
+from .forms import ProjectCreateForm, ProjectForm, ProjectMemberForm
 from .models import Project
 
 
@@ -73,7 +73,7 @@ class ProjectMemberRemoveView(ManagerOrAdminRequiredMixin, View):
 
 class ProjectCreateView(ManagerOrAdminRequiredMixin, CreateView):
     model = Project
-    form_class = ProjectForm
+    form_class = ProjectCreateForm
     template_name = "projects/project_form.html"
     success_url = reverse_lazy("projects:list")
 

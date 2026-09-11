@@ -64,6 +64,35 @@ class ProjectCrudTests(TestCase):
         self.assertEqual(project.created_by, self.manager)
         self.assertIn(self.manager, project.members.all())
 
+    def test_create_with_members(self):
+        self.client.force_login(self.manager)
+        response = self.client.post(
+            reverse("projects:create"),
+            {
+                "name": "Alpha",
+                "description": "",
+                "status": "PLANNING",
+                "start_date": "",
+                "end_date": "",
+                "members": [self.member.pk],
+            },
+        )
+        self.assertRedirects(response, reverse("projects:list"))
+        project = Project.objects.get(name="Alpha")
+        self.assertIn(self.manager, project.members.all())
+        self.assertIn(self.member, project.members.all())
+
+    def test_create_form_has_members_field(self):
+        self.client.force_login(self.manager)
+        response = self.client.get(reverse("projects:create"))
+        self.assertIn("members", response.context["form"].fields)
+
+    def test_update_form_has_no_members_field(self):
+        self.client.force_login(self.manager)
+        project = Project.objects.create(name="Alpha", created_by=self.manager)
+        response = self.client.get(reverse("projects:update", args=[project.pk]))
+        self.assertNotIn("members", response.context["form"].fields)
+
     def test_update(self):
         self.client.force_login(self.manager)
         project = Project.objects.create(name="Alpha", created_by=self.manager)

@@ -1,73 +1,78 @@
 # TaskForge
 
-Project & Task Management Platform — a lightweight, self-hosted project and task
-management system inspired by simplified versions of Jira and Trello.
+Plataforma de gestión de proyectos y tareas — un sistema ligero y autoalojado
+inspirado en versiones simplificadas de Jira y Trello.
 
-## Features
+## Características
 
-- **Users & roles**: `ADMIN`, `MANAGER`, `MEMBER` with Django's built-in auth.
-  Sign-up creates an **inactive** account until an admin approves it.
-- **Projects**: create, track status (`Planning`, `In Progress`, `Completed`, `On Hold`), and manage members.
-- **Tasks**: create, assign, prioritize, and track status (`To Do`, `In Progress`, `Done`).
-- **Comments**: discuss tasks.
-- **Dashboard & Reports**: overview of projects, tasks, workload and overdue items.
-- **Global task board** and **team directory**.
-- **Notifications**: bell with unread counter — alerts when you are assigned a
-  task, added to a project, or when a task/project is completed.
-- **Password reset**: email-based reset link (Gmail SMTP), without leaking
-  whether an account exists.
-- **Security**: role-based access control, `django-axes` brute-force lockout,
-  API throttling, approval-gated registration, env-driven session/cookies.
-- **Desktop client**: optional Windows app (Tauri/WebView2) that works on the
-  LAN and from outside over Tailscale.
-- **REST API**: JSON API for all resources.
-- **Settings**: interface language (English/Español) persisted per user, plus
-  browser-local appearance options (accent color, density).
+- **Usuarios y roles**: `ADMIN`, `MANAGER`, `MEMBER` con la autenticación
+  integrada de Django. El registro crea una cuenta **inactiva** hasta que un
+  administrador la aprueba.
+- **Proyectos**: crear, seguir su estado (`Planning`, `In Progress`, `Completed`, `On Hold`) y gestionar miembros.
+- **Tareas**: crear, asignar, priorizar y seguir su estado (`To Do`, `In Progress`, `Done`).
+- **Comentarios**: discutir tareas.
+- **Panel y reportes**: resumen de proyectos, tareas, carga de trabajo y vencidas.
+- **Tablero global de tareas** y **directorio del equipo**.
+- **Notificaciones**: campana con contador de no leídas — avisa cuando te asignan
+  una tarea, te agregan a un proyecto o se completa una tarea/proyecto.
+- **Recuperación de contraseña**: enlace de restablecimiento por correo (Gmail
+  SMTP), sin revelar si una cuenta existe.
+- **Seguridad**: control de acceso por roles, bloqueo por fuerza bruta con
+  `django-axes`, límite de peticiones en la API, registro sujeto a aprobación y
+  sesiones/cookies configurables por entorno.
+- **Cliente de escritorio**: app opcional para Windows (Tauri/WebView2) que
+  funciona en la LAN y desde fuera con Tailscale.
+- **API REST**: API JSON para todos los recursos.
+- **Ajustes**: idioma de la interfaz (English/Español) guardado por usuario, más
+  opciones de apariencia locales del navegador (color de acento, densidad).
 
-> Status: feature-complete for internal use — auth (+ password reset), projects,
-> tasks, comments, dashboard, reports, REST API, permissions & security,
-> notifications, i18n and the desktop client are done. UI/UX polish remains.
+> Estado: funcionalmente completo para uso interno — auth (+ recuperación de
+> contraseña), proyectos, tareas, comentarios, panel, reportes, API REST,
+> permisos y seguridad, notificaciones, i18n y el cliente de escritorio están
+> listos. Queda pulido de UI/UX.
 
-## How to use TaskForge
+## Cómo usar TaskForge
 
-There are three ways to use it. All of them need the **server** (the PC running
-Docker) turned on with the stack up; the desktop program and remote access also
-need **Tailscale** connected.
+Hay tres formas de usarlo. Todas necesitan el **servidor** (el PC que corre
+Docker) encendido y con el stack levantado; el programa de escritorio y el
+acceso remoto también necesitan **Tailscale** conectado.
 
-1. **Office — any browser (nothing to install):**
-   open `http://<server-host>:8000` (or `http://<server-ip>:8000`) and log in.
-2. **From home — any browser (Tailscale):**
-   connect Tailscale, open `https://<machine>.<tailnet>.ts.net` and log in.
-3. **Desktop program (.exe):**
-   install `TaskForge_0.1.0_x64-setup.exe` once (see
-   [desktop/README.md](desktop/README.md)), then open **TaskForge** from the
-   Start menu. The same program works in the office and from home: it tries the
-   Tailscale name first and the LAN next, using the first one that responds. If
-   none respond it shows a **Retry** screen asking you to check the network/VPN.
+1. **Oficina — cualquier navegador (sin instalar nada):**
+   abre `http://<server-host>:8000` (o `http://<server-ip>:8000`) e inicia sesión.
+2. **Desde casa — cualquier navegador (Tailscale):**
+   conecta Tailscale, abre `https://<machine>.<tailnet>.ts.net` e inicia sesión.
+3. **Programa de escritorio (.exe):**
+   instala `TaskForge_0.1.0_x64-setup.exe` una vez (ver
+   [desktop/README.md](desktop/README.md)), y luego abre **TaskForge** desde el
+   menú Inicio. El mismo programa sirve en la oficina y desde casa: prueba
+   primero el nombre de Tailscale y después la LAN, y usa el primero que
+   responda. Si ninguno responde, muestra una pantalla con **Reintentar** que
+   pide revisar la red/VPN.
 
-The real deployment URLs are not committed: they live in your `.env` (server)
-and are baked into the client at build time (see `desktop/README.md`).
+Las URLs reales del despliegue no se suben al repo: viven en tu `.env`
+(servidor) y se incrustan en el cliente al compilarlo (ver `desktop/README.md`).
 
-New accounts must be approved by an admin before the first login (see
-[Accounts & password reset](#accounts--password-reset)).
+Las cuentas nuevas deben ser aprobadas por un administrador antes del primer
+inicio de sesión (ver
+[Cuentas y recuperación de contraseña](#cuentas-y-recuperación-de-contraseña)).
 
-## Technology stack
+## Stack tecnológico
 
 - **Backend**: Python 3.12, Django 5.2 LTS, Django REST Framework
-- **Database**: PostgreSQL 16
-- **Frontend**: Django Templates, Bootstrap 5 (CDN), vanilla JavaScript
-- **Security**: `django-axes` (brute-force lockout), DRF throttling
-- **Desktop client**: Tauri v2 (Rust) + WebView2, optional and Windows-only
-- **Remote access**: Tailscale (`tailscale serve`, HTTPS)
-- **Development**: Docker, Docker Compose, Git
-- **Testing**: Django's built-in test runner (+ `cargo test` for the client)
+- **Base de datos**: PostgreSQL 16
+- **Frontend**: Django Templates, Bootstrap 5 (CDN), JavaScript vanilla
+- **Seguridad**: `django-axes` (bloqueo por fuerza bruta), throttling de DRF
+- **Cliente de escritorio**: Tauri v2 (Rust) + WebView2, opcional y solo Windows
+- **Acceso remoto**: Tailscale (`tailscale serve`, HTTPS)
+- **Desarrollo**: Docker, Docker Compose, Git
+- **Pruebas**: runner integrado de Django (+ `cargo test` para el cliente)
 
-## Architecture
+## Arquitectura
 
-The project is split into a `backend/` (Django project), a `frontend/`
-(templates + static) and an optional `desktop/` (Tauri client). The frontend is
-server-rendered and kept separate from the backend so it can evolve
-independently.
+El proyecto se divide en `backend/` (proyecto Django), `frontend/` (plantillas
++ estáticos) y un `desktop/` opcional (cliente Tauri). El frontend se renderiza
+en el servidor y se mantiene separado del backend para poder evolucionar de
+forma independiente.
 
 ```
 backend/
@@ -88,9 +93,10 @@ desktop/         Optional Tauri v2 Windows client (Rust + WebView2)
   ui/            Local "no connection" page
 ```
 
-Each domain app owns its models, admin registration, and its own tests.
+Cada app de dominio es dueña de sus modelos, su registro en el admin y sus
+propias pruebas.
 
-## Folder structure
+## Estructura de carpetas
 
 ```
 taskforge/
@@ -118,155 +124,158 @@ taskforge/
 └── README.md
 ```
 
-## Requirements
+## Requisitos
 
-- Docker (with Docker Compose v2)
+- Docker (con Docker Compose v2)
 
-Nothing else is required locally to run the server — everything runs in
-containers. Building the optional desktop client additionally needs Node, Rust
-and VS Build Tools (see `desktop/README.md`).
+Para correr el servidor no hace falta nada más localmente — todo va en
+contenedores. Compilar el cliente de escritorio opcional requiere además Node,
+Rust y VS Build Tools (ver `desktop/README.md`).
 
-## Environment configuration
+## Configuración del entorno
 
-1. Copy the example environment file:
+1. Copia el archivo de entorno de ejemplo:
 
    ```bash
    cp .env.example .env
    ```
 
-2. Edit `.env` and set a real `SECRET_KEY` (any long random string is fine for
-   development). The database values are used by Docker Compose and are
-   already configured for local development.
+2. Edita `.env` y pon un `SECRET_KEY` real (cualquier cadena larga aleatoria
+   sirve para desarrollo). Los valores de base de datos los usa Docker Compose
+   y ya vienen configurados para desarrollo local.
 
-Main groups of variables (see `.env.example` for the full list):
+Grupos principales de variables (la lista completa está en `.env.example`):
 
-- **Database**: `DATABASE_*`.
-- **Email** (password reset): `EMAIL_HOST`, `EMAIL_HOST_USER`,
-  `EMAIL_HOST_PASSWORD` (a Gmail **App Password**, never the account password)
-  and `DEFAULT_FROM_EMAIL`.
-- **Security**: `SESSION_COOKIE_AGE`, `SESSION_EXPIRE_AT_BROWSER_CLOSE`,
+- **Base de datos**: `DATABASE_*`.
+- **Correo** (recuperación de contraseña): `EMAIL_HOST`, `EMAIL_HOST_USER`,
+  `EMAIL_HOST_PASSWORD` (una **App Password** de Gmail, nunca la contraseña de
+  la cuenta) y `DEFAULT_FROM_EMAIL`.
+- **Seguridad**: `SESSION_COOKIE_AGE`, `SESSION_EXPIRE_AT_BROWSER_CLOSE`,
   `SESSION_COOKIE_SECURE`, `CSRF_COOKIE_SECURE`, `CSRF_TRUSTED_ORIGINS`,
   `AXES_ENABLED`, `AXES_FAILURE_LIMIT`, `AXES_COOLOFF_MINUTES`.
 
-`.env` is git-ignored and must never be committed.
+`.env` está ignorado por git y nunca debe commitearse.
 
-## Docker setup
+## Docker
 
-Build and start the full stack:
+Construir y levantar todo el stack:
 
 ```bash
 docker compose up
 ```
 
-This starts the Django application and PostgreSQL database. On first run the
-Dockerfile builds the image (this may take a few minutes).
+Esto inicia la aplicación Django y la base de datos PostgreSQL. En la primera
+ejecución el Dockerfile construye la imagen (puede tardar unos minutos).
 
 - Django: http://localhost:8000
 - Django Admin: http://localhost:8000/admin
-- PostgreSQL: not published to the host (only `web` reaches it on the compose network); use `docker compose exec db psql -U taskforge` if you need a shell.
+- PostgreSQL: no se publica al host (solo `web` lo alcanza en la red de compose); usa `docker compose exec db psql -U taskforge` si necesitas una shell.
 
-`db` is bound to `127.0.0.1`; `web` is published on the LAN (so office clients
-can use it without a VPN). `web` runs `runserver --insecure` so static files are
-served with `DEBUG=0`. Remote users go through Tailscale (see below).
+`db` escucha en `127.0.0.1`; `web` sí se publica en la LAN (así los clientes de
+la oficina lo usan sin VPN). `web` corre `runserver --insecure` para servir los
+estáticos con `DEBUG=0`. Los usuarios remotos pasan por Tailscale (ver abajo).
 
-Stop the stack with `Ctrl+C`, or `docker compose down` to remove containers.
-The database persists in the `postgres_data` Docker volume; use
-`docker compose down -v` to wipe it.
+Detén el stack con `Ctrl+C`, o `docker compose down` para eliminar los
+contenedores. La base de datos persiste en el volumen `postgres_data`; usa
+`docker compose down -v` para borrarla.
 
-## Database setup
+## Base de datos
 
-PostgreSQL is provisioned automatically by Docker Compose using the values in
-`.env`. No manual setup is required.
+PostgreSQL se aprovisiona automáticamente desde Docker Compose con los valores
+de `.env`. No hace falta configuración manual.
 
-## Migration commands
+## Comandos de migración
 
-Migrations run automatically when the `web` container starts. To run them
-manually:
+Las migraciones corren solas al arrancar el contenedor `web`. Para ejecutarlas
+manualmente:
 
 ```bash
 docker compose run --rm web python manage.py makemigrations
 docker compose run --rm web python manage.py migrate
 ```
 
-## Create a superuser
+## Crear un superusuario
 
 ```bash
 docker compose run --rm web python manage.py createsuperuser
 ```
 
-Follow the prompts, then sign in at http://localhost:8000/admin. The user is
-created with `role=MEMBER`; set **Role = Admin** there to get admin powers.
+Sigue las indicaciones e inicia sesión en http://localhost:8000/admin. El
+usuario se crea con `role=MEMBER`; pon **Role = Admin** ahí para tener permisos
+de administración.
 
-## Accounts & password reset
+## Cuentas y recuperación de contraseña
 
-- Self-registration at `/accounts/register/` creates an **inactive** user.
-  Approve it from `/admin` with the action **"Approve selected users
-  (activate)"** before the person can log in.
-- Password reset lives at `/accounts/password_reset/` and sends the reset link
-  by email (Gmail SMTP by default, see the `EMAIL_*` variables). Without email
-  credentials configured, reset emails are not delivered.
-- Brute-force protection (`django-axes`) locks a username+IP after 5 failed
-  logins for 30 minutes; unlock from `/admin` or with the `axes_reset` command.
+- El autorregistro en `/accounts/register/` crea un usuario **inactivo**.
+  Apruébalo desde `/admin` con la acción **"Approve selected users
+  (activate)"** antes de que la persona pueda iniciar sesión.
+- La recuperación de contraseña está en `/accounts/password_reset/` y envía el
+  enlace por correo (Gmail SMTP por defecto, ver las variables `EMAIL_*`). Sin
+  credenciales de correo configuradas, los correos de restablecimiento no se
+  envían.
+- La protección contra fuerza bruta (`django-axes`) bloquea un usuario+IP tras
+  5 intentos fallidos durante 30 minutos; desbloquea desde `/admin` o con el
+  comando `axes_reset`.
 
-## Start the project
+## Iniciar el proyecto
 
 ```bash
 docker compose up
 ```
 
-## Deploy on a server
+## Desplegar en un servidor
 
-The whole stack is plain Docker Compose, so it runs on any machine with Docker
-(a Linux server, mini PC, NAS or VPS) — nothing is tied to the development
-laptop. The server needs **Docker Engine + Compose v2** (on Linux you do not
-need Docker Desktop).
+Todo el stack es Docker Compose puro, así que corre en cualquier máquina con
+Docker (un servidor Linux, mini PC, NAS o VPS) — nada está atado a la laptop de
+desarrollo. El servidor necesita **Docker Engine + Compose v2** (en Linux no
+hace falta Docker Desktop).
 
-1. Get the code on the server (private repo: invite the person as a
-   collaborator first):
+1. Consigue el código en el servidor (repo privado: invita primero a la persona
+   como colaboradora):
 
    ```bash
    git clone https://github.com/YovanyPerez/TaskForge.git
    cd TaskForge
    ```
 
-   Or download the ZIP from GitHub (`Code → Download ZIP`) and extract it.
+   O descarga el ZIP desde GitHub (`Code → Download ZIP`) y descomprímelo.
 
-2. Create the environment file and fill in real values:
+2. Crea el archivo de entorno y rellena valores reales:
 
    ```bash
    cp .env.example .env
    ```
 
-   - `SECRET_KEY`: generate a new one, e.g.
+   - `SECRET_KEY`: genera uno nuevo, por ejemplo
      `python -c "import secrets; print(secrets.token_urlsafe(50))"`.
-   - `DATABASE_*`: keep the defaults or change them before the first boot.
-   - `EMAIL_*` + `DEFAULT_FROM_EMAIL`: only needed for password reset.
-   - `DJANGO_ALLOWED_HOSTS` / `CSRF_TRUSTED_ORIGINS`: the server's IP/host and,
-     for remote access, its `*.ts.net` name.
+   - `DATABASE_*`: deja los valores por defecto o cámbialos antes del primer arranque.
+   - `EMAIL_*` + `DEFAULT_FROM_EMAIL`: solo hacen falta para la recuperación de contraseña.
+   - `DJANGO_ALLOWED_HOSTS` / `CSRF_TRUSTED_ORIGINS`: la IP/host del servidor y,
+     para acceso remoto, su nombre `*.ts.net`.
 
-   **Never copy another installation's `.env`** — it contains secrets.
+   **Nunca copies el `.env` de otra instalación** — contiene secretos.
 
-3. Start it (migrations run automatically):
+3. Arráncalo (las migraciones corren solas):
 
    ```bash
    docker compose up -d
    ```
 
-   The app is then at `http://<server-ip>:8000`. For access from outside the
-   office, install Tailscale on the server (see
-   [Access from outside](#access-from-outside-tailscale)).
+   La app queda en `http://<server-ip>:8000`. Para acceso desde fuera de la
+   oficina, instala Tailscale en el servidor (ver
+   [Acceso desde fuera](#acceso-desde-fuera-tailscale)).
 
-### Moving existing data
+### Migrar datos existentes
 
-To bring projects/users from an old installation, stop the app on the new
-machine and dump/restore the database:
+Para traer proyectos/usuarios de una instalación antigua, para la app en la
+máquina nueva y haz dump/restore de la base de datos:
 
 ```bash
-# old machine
+# máquina antigua
 docker compose exec -T db sh -c \
   'pg_dump --clean --if-exists -U "$POSTGRES_USER" "$POSTGRES_DB"' > taskforge.sql
 
-# new machine
+# máquina nueva
 docker compose up -d
 docker compose stop web
 docker compose exec -T db sh -c \
@@ -274,60 +283,62 @@ docker compose exec -T db sh -c \
 docker compose start web
 ```
 
-(`$POSTGRES_USER` / `$POSTGRES_DB` are expanded inside the `db` container.)
+(`$POSTGRES_USER` / `$POSTGRES_DB` se expanden dentro del contenedor `db`.)
 
-### Server notes
+### Notas del servidor
 
-- `web` runs Django's development server (`runserver --insecure`). That is fine
-  for a small internal team; for heavier or public use, switch to `gunicorn`
-  plus a static-file server (whitenoise/nginx).
-- Schedule regular `pg_dump` backups (cron): the database lives in the
-  `postgres_data` Docker volume, so losing the disk without a backup loses all
-  data.
+- `web` corre el servidor de desarrollo de Django (`runserver --insecure`).
+  Está bien para un equipo interno pequeño; para más carga o uso público, cambia
+  a `gunicorn` más un servidor de estáticos (whitenoise/nginx).
+- Programa backups periódicos con `pg_dump` (cron): la base de datos vive en el
+  volumen `postgres_data`, así que perder el disco sin backup es perder todo.
 
-## Desktop client (Windows)
+## Cliente de escritorio (Windows)
 
-`desktop/` contains a Tauri v2 wrapper that shows the app in a native window
-(WebView2). It is optional: the web UI keeps working as usual.
+`desktop/` contiene un envoltorio Tauri v2 que muestra la app en una ventana
+nativa (WebView2). Es opcional: la interfaz web sigue funcionando igual.
 
-- Build: see `desktop/README.md` (needs Node, Rust and VS Build Tools).
-- The client tries a list of server URLs and uses the first one that responds
-  (Tailscale name first, then the LAN host/IP), so the same installer works
-  inside the office and from outside. Override with a `taskforge.json` file
-  next to the `.exe` (`server_urls`).
-- If no server responds, it shows an offline screen with a **Retry** button.
+- Compilar: ver `desktop/README.md` (necesita Node, Rust y VS Build Tools).
+- El cliente prueba una lista de URLs del servidor y usa la primera que
+  responda (primero el nombre de Tailscale, luego el host/IP de la LAN), así el
+  mismo instalador sirve dentro y fuera de la oficina. Se puede sobrescribir con
+  un archivo `taskforge.json` junto al `.exe` (`server_urls`).
+- Si ningún servidor responde, muestra una pantalla sin conexión con un botón
+  **Reintentar**.
 
-### Access from outside (Tailscale)
+### Acceso desde fuera (Tailscale)
 
-1. Install Tailscale on the server and run `tailscale up`.
-2. In the Tailscale admin console, enable **MagicDNS** and **HTTPS
-   certificates**, note the machine name (`<machine>.<tailnet>.ts.net`).
-3. Expose the Django port over HTTPS:
+1. Instala Tailscale en el servidor y ejecuta `tailscale up`.
+2. En la consola de administración de Tailscale, activa **MagicDNS** y
+   **certificados HTTPS**, y anota el nombre de la máquina
+   (`<machine>.<tailnet>.ts.net`).
+3. Expón el puerto de Django por HTTPS:
 
    ```bash
    tailscale serve --bg --https=443 http://127.0.0.1:8000
    ```
 
-4. In `.env` set `DJANGO_ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` to include
-   the `*.ts.net` name, then `docker compose up -d`.
+4. En `.env` pon `DJANGO_ALLOWED_HOSTS` y `CSRF_TRUSTED_ORIGINS` con el nombre
+   `*.ts.net`, y luego `docker compose up -d`.
 
-Remote users install Tailscale once (same account) and then just open the
-TaskForge program. Office users do not need Tailscale: the `web` port is
-published on the LAN (`http://<server>:8000`).
+Los usuarios remotos instalan Tailscale una vez (misma cuenta) y después solo
+abren el programa TaskForge. Los usuarios de la oficina no necesitan Tailscale:
+el puerto de `web` se publica en la LAN (`http://<server>:8000`).
 
-> Security note: because LAN clients use plain HTTP, `SESSION_COOKIE_SECURE`
-> and `CSRF_COOKIE_SECURE` stay `0` (otherwise LAN logins would not persist).
-> Traffic over Tailscale is still encrypted by WireGuard.
+> Nota de seguridad: como los clientes de la LAN usan HTTP plano,
+> `SESSION_COOKIE_SECURE` y `CSRF_COOKIE_SECURE` quedan en `0` (si no, los
+> inicios de sesión de la LAN no persistirían). El tráfico por Tailscale sigue
+> cifrado por WireGuard.
 
-## REST API
+## API REST
 
-The API is served under `/api/` (Django REST Framework) and requires
-authentication (`SessionAuthentication`, same session as the web app). A
-browsable API is available when logged in.
+La API se sirve bajo `/api/` (Django REST Framework) y requiere autenticación
+(`SessionAuthentication`, la misma sesión que la app web). Con sesión iniciada
+hay una API navegable.
 
-| Endpoint | Methods |
+| Endpoint | Métodos |
 | --- | --- |
-| `/api/users/` | `GET`, `GET /api/users/<id>/` (read-only) |
+| `/api/users/` | `GET`, `GET /api/users/<id>/` (solo lectura) |
 | `/api/projects/` | `GET`, `POST` |
 | `/api/projects/<id>/` | `GET`, `PUT`, `PATCH`, `DELETE` |
 | `/api/tasks/` | `GET`, `POST` |
@@ -335,24 +346,24 @@ browsable API is available when logged in.
 | `/api/comments/` | `GET`, `POST` |
 | `/api/comments/<id>/` | `GET`, `PUT`, `PATCH`, `DELETE` |
 
-### Authentication
+### Autenticación
 
-- **Session**: same session as the web app (browsable API).
-- **Token**: obtain a token with `POST /api/token-auth/` (username + password),
-  then send it as `Authorization: Token <key>`.
+- **Sesión**: la misma que la app web (API navegable).
+- **Token**: obtén un token con `POST /api/token-auth/` (usuario + contraseña),
+  y luego envíalo como `Authorization: Token <key>`.
 
-### Permissions
+### Permisos
 
-- `MEMBER` sees only projects/tasks/comments where they are a member.
-- `ADMIN`/`MANAGER` see everything and are the only roles that can create,
-  update, or delete projects and tasks via the API.
-- `/api/users/` is restricted to `ADMIN`/`MANAGER` (avoids email disclosure to
-  members).
-- Comments can be created by any project member; only the author or an
-  `ADMIN`/`MANAGER` can modify or delete a comment.
-- `POST /api/token-auth/` is rate-limited (10/min per IP).
+- `MEMBER` solo ve proyectos/tareas/comentarios donde es miembro.
+- `ADMIN`/`MANAGER` ven todo y son los únicos roles que pueden crear,
+  actualizar o borrar proyectos y tareas vía API.
+- `/api/users/` está restringido a `ADMIN`/`MANAGER` (evita exponer correos a
+  los miembros).
+- Los comentarios los puede crear cualquier miembro del proyecto; solo el autor
+  o un `ADMIN`/`MANAGER` pueden modificarlo o borrarlo.
+- `POST /api/token-auth/` tiene límite de peticiones (10/min por IP).
 
-## Run tests
+## Ejecutar tests
 
 ```bash
 docker compose run --rm web python manage.py test

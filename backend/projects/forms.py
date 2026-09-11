@@ -25,6 +25,25 @@ class ProjectForm(forms.ModelForm):
         }
 
 
+class ProjectCreateForm(ProjectForm):
+    class Meta(ProjectForm.Meta):
+        fields = ProjectForm.Meta.fields + ("members",)
+        widgets = {
+            **ProjectForm.Meta.widgets,
+            "members": forms.SelectMultiple(attrs={"class": "form-control"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["members"].queryset = (
+            get_user_model()
+            .objects.filter(is_active=True)
+            .order_by("username")
+        )
+        self.fields["members"].label = _("Members")
+        self.fields["members"].required = False
+
+
 class ProjectMemberForm(forms.Form):
     user = forms.ModelChoiceField(
         queryset=get_user_model().objects.none(),

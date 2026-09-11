@@ -51,7 +51,7 @@
   `users/middleware.py:UserLanguageMiddleware`.
 - Catalog lives at repo-root `locale/` (`LOCALE_PATHS`). Regenerate from `/app`
   (NOT `backend/`, templates live in `frontend/`):
-  `docker compose run --rm -w /app web python backend/manage.py makemessages -l es --ignore=.git --ignore=staticfiles`,
+  `docker compose run --rm -w /app web python backend/manage.py makemessages -l es --ignore=.git --ignore=staticfiles --ignore=desktop/src-tauri/target --ignore=desktop/node_modules`,
   then fill `msgstr`, then `compilemessages`. Rebuild the image after
   `Dockerfile` changes (`gettext` system package is required).
 

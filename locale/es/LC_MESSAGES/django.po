@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TaskForge\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-10 21:58+0000\n"
+"POT-Creation-Date: 2026-09-11 17:01+0000\n"
 "PO-Revision-Date: 2026-09-10 12:00+0000\n"
 "Last-Translator: TaskForge <taskforge@example.com>\n"
 "Language-Team: Spanish\n"
@@ -67,7 +67,14 @@ msgstr "Fecha de fin"
 msgid "Status"
 msgstr "Estado"
 
-#: backend/projects/forms.py:32
+#: backend/projects/forms.py:43
+#: frontend/templates/projects/project_detail.html:41
+#: frontend/templates/projects/project_list.html:31
+#: frontend/templates/reports.html:24
+msgid "Members"
+msgstr "Miembros"
+
+#: backend/projects/forms.py:51
 msgid "Add member"
 msgstr "Añadir miembro"
 
@@ -387,6 +394,7 @@ msgstr "Aún no hay tareas"
 
 #: frontend/templates/dashboard.html:92
 #: frontend/templates/projects/project_list.html:42
+#: frontend/templates/users/team_list.html:37
 msgid "No projects yet."
 msgstr "Aún no hay proyectos."
 
@@ -558,12 +566,6 @@ msgstr "Sin descripción por ahora."
 #: frontend/templates/tasks/task_detail.html:53
 msgid "Created by"
 msgstr "Creado por"
-
-#: frontend/templates/projects/project_detail.html:41
-#: frontend/templates/projects/project_list.html:31
-#: frontend/templates/reports.html:24
-msgid "Members"
-msgstr "Miembros"
 
 #: frontend/templates/projects/project_detail.html:46
 msgid "Add"
@@ -1019,7 +1021,11 @@ msgstr "Tareas abiertas"
 msgid "No open tasks assigned."
 msgstr "Sin tareas abiertas asignadas."
 
-#: frontend/templates/users/team_list.html:34
+#: frontend/templates/users/team_list.html:29
+msgid "Working on"
+msgstr "Trabajando en"
+
+#: frontend/templates/users/team_list.html:46
 msgid "No teammates yet."
 msgstr "Aún no tienes compañeros de equipo."
 
