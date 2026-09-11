@@ -9,6 +9,7 @@
     <section class="tf-card tf-card-accent-green" aria-labelledby="register-heading">
       <p class="tf-eyebrow">{% trans "Join TaskForge" %}</p>
       <h1 id="register-heading" class="h3">{% trans "Create account" %}</h1>
+      <p class="tf-muted small">{% trans "Accounts are activated after an administrator approves them." %}</p>
       <form method="post">
         {% csrf_token %}
         {% include "partials/form_fields.html" %}

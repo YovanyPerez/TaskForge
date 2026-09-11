@@ -14,7 +14,8 @@
         {% include "partials/form_fields.html" %}
         <button type="submit" class="tf-btn tf-btn-primary w-100 mt-3">{% trans "Log in" %}</button>
       </form>
-      <p class="tf-muted small mt-3 mb-0">{% trans "No account?" %} <a href="{% url 'users:register' %}">{% trans "Register" %}</a></p>
+      <p class="tf-muted small mt-3 mb-0"><a href="{% url 'users:password_reset' %}">{% trans "Forgot your password?" %}</a></p>
+      <p class="tf-muted small mt-1 mb-0">{% trans "No account?" %} <a href="{% url 'users:register' %}">{% trans "Register" %}</a></p>
     </section>
   </div>
 </div>

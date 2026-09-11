@@ -29,3 +29,13 @@ class IsOwnerOrManager(BasePermission):
         if user.is_admin or user.is_manager:
             return True
         return obj.user_id == user.pk
+
+
+class IsAdminOrManager(BasePermission):
+    message = _("Only administrators and managers can access this resource.")
+
+    def has_permission(self, request, view):
+        user = request.user
+        return bool(
+            user and user.is_authenticated and (user.is_admin or user.is_manager)
+        )

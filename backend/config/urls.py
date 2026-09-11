@@ -14,6 +14,7 @@ urlpatterns = [
         "projects/<int:project_pk>/tasks/<int:task_pk>/comments/",
         include("comments.urls"),
     ),
+    path("notifications/", include("notifications.urls")),
     path("api/", include("api.urls")),
     path("", views.DashboardView.as_view(), name="home"),
     path("reports/", views.ReportsView.as_view(), name="reports"),

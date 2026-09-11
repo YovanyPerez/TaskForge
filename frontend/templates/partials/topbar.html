@@ -5,11 +5,28 @@
 <a class="tf-brand-mark text-decoration-none d-lg-none" href="{% url 'home' %}">TASKFORGE</a>
 
 <div class="d-flex align-items-center gap-2 ms-auto">
-  <button class="tf-icon-button" type="button" disabled aria-disabled="true" title="{% trans "Notifications (coming soon)" %}">
-    <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-bell"/></svg>
-    <span class="visually-hidden">{% trans "Notifications coming soon" %}</span>
-  </button>
   {% if user.is_authenticated %}
+    <div class="dropdown">
+      <button id="tf-notif-bell" class="tf-icon-button" type="button" data-bs-toggle="dropdown"
+              data-feed-url="{% url 'notifications:feed' %}" aria-expanded="false"
+              aria-label="{% trans "Notifications" %}">
+        <svg class="tf-icon" aria-hidden="true"><use href="#tf-i-bell"/></svg>
+        <span id="tf-notif-badge" class="tf-notif-badge {% if not unread_notifications %}d-none{% endif %}">{{ unread_notifications }}</span>
+      </button>
+      <div class="dropdown-menu dropdown-menu-end tf-notif-menu">
+        <div class="d-flex justify-content-between align-items-center gap-2 mb-1">
+          <strong class="tf-eyebrow mb-0">{% trans "Notifications" %}</strong>
+          <form id="tf-notif-mark-all" method="post" action="{% url 'notifications:read-all' %}" class="m-0 {% if not unread_notifications %}d-none{% endif %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" class="tf-btn tf-btn-sm tf-btn-ghost">{% trans "Mark all read" %}</button>
+          </form>
+        </div>
+        <ul id="tf-notif-list" class="list-unstyled mb-0">
+          {% include "notifications/partials/notification_items.html" with notifications=recent_notifications %}
+        </ul>
+      </div>
+    </div>
     <a class="d-flex align-items-center gap-2 text-decoration-none" href="{% url 'users:profile' %}">
       <span class="tf-avatar tf-avatar-sm" aria-hidden="true">{{ user.username|slice:":2"|upper }}</span>
       <span>

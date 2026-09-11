@@ -34,5 +34,10 @@ Thumbs.db
 # Node
 node_modules/
 
+# Desktop client (Tauri)
+desktop/src-tauri/target/
+desktop/src-tauri/gen/
+desktop/dist/
+
 # Logs
 *.log

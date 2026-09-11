@@ -1,0 +1,30 @@
+{% load i18n %}
+{% for n in notifications %}
+  <li>
+    <a class="dropdown-item tf-notif-item" href="{{ n.get_url }}"
+       data-notif-read-url="{% url 'notifications:read' n.pk %}">
+      <span>
+        {% if n.verb == "TASK_ASSIGNED" %}
+          {% if n.actor %}
+            {% blocktrans with actor=n.actor.username task=n.task.title %}<strong>{{ actor }}</strong> assigned you the task “{{ task }}”{% endblocktrans %}
+          {% else %}
+            {% blocktrans with task=n.task.title %}You were assigned the task “{{ task }}”{% endblocktrans %}
+          {% endif %}
+        {% elif n.verb == "PROJECT_MEMBER_ADDED" %}
+          {% if n.actor %}
+            {% blocktrans with actor=n.actor.username project=n.project.name %}<strong>{{ actor }}</strong> added you to the project “{{ project }}”{% endblocktrans %}
+          {% else %}
+            {% blocktrans with project=n.project.name %}You were added to the project “{{ project }}”{% endblocktrans %}
+          {% endif %}
+        {% elif n.verb == "TASK_COMPLETED" %}
+          {% blocktrans with task=n.task.title %}The task “{{ task }}” was completed{% endblocktrans %}
+        {% elif n.verb == "PROJECT_COMPLETED" %}
+          {% blocktrans with project=n.project.name %}The project “{{ project }}” was completed{% endblocktrans %}
+        {% endif %}
+      </span>
+      <span class="tf-notif-time">{{ n.created_at|date:"M j, H:i" }}</span>
+    </a>
+  </li>
+{% empty %}
+  <li><span class="dropdown-item-text tf-muted small">{% trans "No notifications yet." %}</span></li>
+{% endfor %}

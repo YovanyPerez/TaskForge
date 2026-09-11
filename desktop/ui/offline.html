@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TaskForge — Sin conexión</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 32px;
+    }
+    .card {
+      max-width: 460px;
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+    }
+    .logo {
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #f59e0b;
+      font-size: 14px;
+    }
+    h1 { font-size: 22px; margin: 12px 0 8px; }
+    p { color: #9da7b3; font-size: 14px; line-height: 1.55; margin: 8px 0; }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      background: #f59e0b;
+      color: #1c1400;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover { background: #fbbf24; }
+    button:disabled { opacity: 0.6; cursor: wait; }
+    .status { min-height: 20px; font-size: 13px; color: #f0b429; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">TASKFORGE</div>
+    <h1>No se pudo conectar</h1>
+    <p>Verifica tu <strong>conexión de red</strong> (o la <strong>VPN</strong> si estás fuera de la oficina) y vuelve a intentar.</p>
+    <p class="status" id="status"></p>
+    <button id="retry">Reintentar</button>
+  </div>
+
+  <script>
+    const retryButton = document.getElementById("retry");
+    const status = document.getElementById("status");
+
+    retryButton.addEventListener("click", async () => {
+      retryButton.disabled = true;
+      status.textContent = "Comprobando conexión…";
+      try {
+        const urls = await window.__TAURI__.core.invoke("get_server_urls");
+        const url = await window.__TAURI__.core.invoke("find_server", { urls });
+        if (url) {
+          status.textContent = "Conectado. Abriendo TaskForge…";
+          await window.__TAURI__.core.invoke("open_server", { url });
+        } else {
+          status.textContent = "Sigue sin conexión. Revisa la red o la VPN e inténtalo de nuevo.";
+          retryButton.disabled = false;
+        }
+      } catch (error) {
+        status.textContent = "Error inesperado: " + error;
+        retryButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

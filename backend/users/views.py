@@ -22,6 +22,18 @@ class RegisterView(CreateView):
     template_name = "users/register.html"
     success_url = reverse_lazy("users:login")
 
+    def form_valid(self, form):
+        form.instance.is_active = False
+        response = super().form_valid(form)
+        messages.success(
+            self.request,
+            _(
+                "Account created. An administrator must approve it before you "
+                "can log in."
+            ),
+        )
+        return response
+
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User

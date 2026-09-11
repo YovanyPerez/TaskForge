@@ -1,0 +1,12 @@
+{
+  "name": "taskforge-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TaskForge desktop client (Windows)",
+  "scripts": {
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}
