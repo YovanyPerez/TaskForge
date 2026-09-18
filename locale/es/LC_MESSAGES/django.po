@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TaskForge\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-18 23:41+0000\n"
+"POT-Creation-Date: 2026-09-18 23:47+0000\n"
 "PO-Revision-Date: 2026-09-10 12:00+0000\n"
 "Last-Translator: TaskForge <taskforge@example.com>\n"
 "Language-Team: Spanish\n"
@@ -1014,31 +1014,35 @@ msgid "Accent color"
 msgstr "Color de acento"
 
 #: frontend/templates/users/settings.html:37
+msgid "Yellow"
+msgstr "Amarillo"
+
+#: frontend/templates/users/settings.html:38
 msgid "Violet"
 msgstr "Violeta"
 
-#: frontend/templates/users/settings.html:38
+#: frontend/templates/users/settings.html:39
 msgid "Cyan"
 msgstr "Cian"
 
-#: frontend/templates/users/settings.html:39
+#: frontend/templates/users/settings.html:40
 msgid "Magenta"
 msgstr "Magenta"
 
-#: frontend/templates/users/settings.html:40
+#: frontend/templates/users/settings.html:41
 msgid "Orange"
 msgstr "Naranja"
 
-#: frontend/templates/users/settings.html:44
 #: frontend/templates/users/settings.html:45
+#: frontend/templates/users/settings.html:46
 msgid "Density"
 msgstr "Densidad"
 
-#: frontend/templates/users/settings.html:46
+#: frontend/templates/users/settings.html:47
 msgid "Comfortable"
 msgstr "Cómoda"
 
-#: frontend/templates/users/settings.html:47
+#: frontend/templates/users/settings.html:48
 msgid "Compact"
 msgstr "Compacta"
 
@@ -1077,9 +1081,6 @@ msgstr "Aún no tienes compañeros de equipo."
 
 #~ msgid "System"
 #~ msgstr "Sistema"
-
-#~ msgid "Yellow"
-#~ msgstr "Amarillo"
 
 #~ msgid "Blue"
 #~ msgstr "Azul"

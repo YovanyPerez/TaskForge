@@ -11,11 +11,12 @@
   --tf-blue: #5b8cff;
   --tf-green: #65d68a;
   --tf-red: #ff5c5c;
+  --tf-accent-yellow: var(--tf-yellow);
   --tf-accent-violet: #b197fc;
   --tf-accent-cyan: #66d9e8;
   --tf-accent-magenta: #e599f7;
   --tf-accent-orange: #ffc078;
-  --tf-accent: var(--tf-accent-violet);
+  --tf-accent: var(--tf-accent-yellow);
   --tf-border: 3px solid var(--tf-black);
   --tf-border-thin: 2px solid var(--tf-black);
   --tf-shadow: 6px 6px 0 var(--tf-black);

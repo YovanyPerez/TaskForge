@@ -276,6 +276,10 @@ button.tf-nav-link {
 }
 
 /* Appearance overrides (persisted in localStorage, see appearance.js) */
+html[data-accent="yellow"] {
+  --tf-accent: var(--tf-accent-yellow);
+}
+
 html[data-accent="violet"] {
   --tf-accent: var(--tf-accent-violet);
 }

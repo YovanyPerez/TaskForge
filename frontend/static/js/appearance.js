@@ -28,7 +28,7 @@
   }
 
   function apply() {
-    var accent = current("tf-accent", "violet");
+    var accent = current("tf-accent", "yellow");
     var density = current("tf-density", "comfortable");
     var mode = theme();
     root.setAttribute("data-accent", accent);
