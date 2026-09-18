@@ -46,6 +46,7 @@ class SettingsTests(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse("users:settings"))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "data-tf-theme-option")
         self.assertContains(response, "data-tf-accent-option")
         self.assertContains(response, "data-tf-density-option")
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TaskForge\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-11 17:01+0000\n"
+"POT-Creation-Date: 2026-09-18 23:41+0000\n"
 "PO-Revision-Date: 2026-09-10 12:00+0000\n"
 "Last-Translator: TaskForge <taskforge@example.com>\n"
 "Language-Team: Spanish\n"
@@ -236,19 +236,52 @@ msgstr ""
 msgid "Settings saved."
 msgstr "Ajustes guardados."
 
+#: frontend/templates/403.html:4 frontend/templates/403.html:11
+msgid "Access denied"
+msgstr "Acceso denegado"
+
+#: frontend/templates/403.html:12
+msgid "You do not have permission to view this page."
+msgstr "No tienes permiso para ver esta página."
+
+#: frontend/templates/403.html:13 frontend/templates/404.html:13
+#: frontend/templates/500.html:48
+msgid "Back to the dashboard"
+msgstr "Volver al panel"
+
+#: frontend/templates/404.html:4 frontend/templates/404.html:11
+msgid "Page not found"
+msgstr "Página no encontrada"
+
+#: frontend/templates/404.html:12
+msgid "The page you are looking for does not exist or was moved."
+msgstr "La página que buscas no existe o se movió."
+
+#: frontend/templates/500.html:6 frontend/templates/500.html:46
+msgid "Something went wrong"
+msgstr "Algo salió mal"
+
+#: frontend/templates/500.html:47
+msgid "The server had a problem. Please try again in a moment."
+msgstr "El servidor tuvo un problema. Inténtalo de nuevo en un momento."
+
 #: frontend/templates/base.html:17
+msgid "TaskForge — self-hosted project and task management."
+msgstr "TaskForge — gestión de proyectos y tareas autoalojada."
+
+#: frontend/templates/base.html:28
 msgid "Skip to main content"
 msgstr "Saltar al contenido principal"
 
-#: frontend/templates/base.html:20
+#: frontend/templates/base.html:31
 msgid "Application navigation"
 msgstr "Navegación principal"
 
-#: frontend/templates/base.html:34
+#: frontend/templates/base.html:45
 msgid "Close"
 msgstr "Cerrar"
 
-#: frontend/templates/base.html:44
+#: frontend/templates/base.html:55
 msgid "Project & Task Management Platform"
 msgstr "Plataforma de gestión de proyectos y tareas"
 
@@ -964,35 +997,48 @@ msgstr "Solo se guarda en este navegador."
 
 #: frontend/templates/users/settings.html:28
 #: frontend/templates/users/settings.html:29
+msgid "Theme"
+msgstr "Tema"
+
+#: frontend/templates/users/settings.html:30
+msgid "Light"
+msgstr "Claro"
+
+#: frontend/templates/users/settings.html:31
+msgid "Dark"
+msgstr "Oscuro"
+
+#: frontend/templates/users/settings.html:35
+#: frontend/templates/users/settings.html:36
 msgid "Accent color"
 msgstr "Color de acento"
 
-#: frontend/templates/users/settings.html:30
-msgid "Yellow"
-msgstr "Amarillo"
-
-#: frontend/templates/users/settings.html:31
-msgid "Blue"
-msgstr "Azul"
-
-#: frontend/templates/users/settings.html:32
-msgid "Pink"
-msgstr "Rosa"
-
-#: frontend/templates/users/settings.html:33
-msgid "Green"
-msgstr "Verde"
-
 #: frontend/templates/users/settings.html:37
+msgid "Violet"
+msgstr "Violeta"
+
 #: frontend/templates/users/settings.html:38
+msgid "Cyan"
+msgstr "Cian"
+
+#: frontend/templates/users/settings.html:39
+msgid "Magenta"
+msgstr "Magenta"
+
+#: frontend/templates/users/settings.html:40
+msgid "Orange"
+msgstr "Naranja"
+
+#: frontend/templates/users/settings.html:44
+#: frontend/templates/users/settings.html:45
 msgid "Density"
 msgstr "Densidad"
 
-#: frontend/templates/users/settings.html:39
+#: frontend/templates/users/settings.html:46
 msgid "Comfortable"
 msgstr "Cómoda"
 
-#: frontend/templates/users/settings.html:40
+#: frontend/templates/users/settings.html:47
 msgid "Compact"
 msgstr "Compacta"
 
@@ -1028,6 +1074,21 @@ msgstr "Trabajando en"
 #: frontend/templates/users/team_list.html:46
 msgid "No teammates yet."
 msgstr "Aún no tienes compañeros de equipo."
+
+#~ msgid "System"
+#~ msgstr "Sistema"
+
+#~ msgid "Yellow"
+#~ msgstr "Amarillo"
+
+#~ msgid "Blue"
+#~ msgstr "Azul"
+
+#~ msgid "Pink"
+#~ msgstr "Rosa"
+
+#~ msgid "Green"
+#~ msgstr "Verde"
 
 #~ msgid "Notifications (coming soon)"
 #~ msgstr "Notificaciones (próximamente)"

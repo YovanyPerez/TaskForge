@@ -52,7 +52,7 @@
 }
 
 .tf-nav-link:hover {
-  background: #fff7d6;
+  background: color-mix(in srgb, var(--tf-accent) 30%, var(--tf-white));
 }
 
 button.tf-nav-link {
@@ -70,7 +70,7 @@ button.tf-nav-link {
 
 .tf-nav-link.is-disabled {
   background: transparent;
-  color: #6f695d;
+  color: var(--tf-muted);
   border-style: dashed;
   cursor: not-allowed;
 }
@@ -276,16 +276,20 @@ button.tf-nav-link {
 }
 
 /* Appearance overrides (persisted in localStorage, see appearance.js) */
-html[data-accent="blue"] {
-  --tf-accent: var(--tf-blue);
+html[data-accent="violet"] {
+  --tf-accent: var(--tf-accent-violet);
 }
 
-html[data-accent="pink"] {
-  --tf-accent: var(--tf-pink);
+html[data-accent="cyan"] {
+  --tf-accent: var(--tf-accent-cyan);
 }
 
-html[data-accent="green"] {
-  --tf-accent: var(--tf-green);
+html[data-accent="magenta"] {
+  --tf-accent: var(--tf-accent-magenta);
+}
+
+html[data-accent="orange"] {
+  --tf-accent: var(--tf-accent-orange);
 }
 
 html[data-density="compact"] .tf-card {
@@ -482,6 +486,11 @@ input.form-control {
   border-color: var(--tf-black) !important;
 }
 
+.tf-list-item {
+  border: var(--tf-border-thin);
+  background: var(--tf-white);
+}
+
 .tf-empty {
   border: 3px dashed var(--tf-black);
   background: var(--tf-panel);
@@ -507,7 +516,7 @@ input.form-control {
 }
 
 .tf-search input:disabled {
-  color: #6f695d !important;
+  color: var(--tf-muted) !important;
 }
 
 .tf-icon-button {
@@ -524,7 +533,7 @@ input.form-control {
 .tf-icon-button:disabled {
   cursor: not-allowed;
   background: var(--tf-panel);
-  color: #6f695d;
+  color: var(--tf-muted);
 }
 
 .tf-icon-button {
@@ -581,4 +590,26 @@ input.form-control {
   font-size: 0.72rem;
   white-space: nowrap;
   font-weight: 700;
+}
+
+/* Dark theme fine-tuning for fixed light-mode colors. */
+:root[data-theme="dark"] .tf-error,
+:root[data-theme="dark"] .invalid-feedback {
+  color: var(--tf-red) !important;
+}
+
+:root[data-theme="dark"] .alert-danger {
+  background: #3a1f22 !important;
+}
+
+:root[data-theme="dark"] .alert-success {
+  background: #1b3126 !important;
+}
+
+:root[data-theme="dark"] .alert-info {
+  background: #1d2a44 !important;
+}
+
+:root[data-theme="dark"] .alert-warning {
+  background: #3a3117 !important;
 }

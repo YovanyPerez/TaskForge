@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Page not found" %} — TaskForge{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <section class="tf-card tf-card-accent-yellow" aria-labelledby="not-found-heading">
+      <p class="tf-eyebrow">404</p>
+      <h1 id="not-found-heading" class="h3">{% trans "Page not found" %}</h1>
+      <p class="tf-muted small">{% trans "The page you are looking for does not exist or was moved." %}</p>
+      <a class="tf-btn tf-btn-primary w-100 mt-3" href="{% url 'home' %}">{% trans "Back to the dashboard" %}</a>
+    </section>
+  </div>
+</div>
+{% endblock %}

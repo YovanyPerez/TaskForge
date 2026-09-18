@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   --tf-bg: #f4f1ea;
   --tf-panel: #fffdf7;
   --tf-white: #ffffff;
@@ -10,7 +11,11 @@
   --tf-blue: #5b8cff;
   --tf-green: #65d68a;
   --tf-red: #ff5c5c;
-  --tf-accent: var(--tf-yellow);
+  --tf-accent-violet: #b197fc;
+  --tf-accent-cyan: #66d9e8;
+  --tf-accent-magenta: #e599f7;
+  --tf-accent-orange: #ffc078;
+  --tf-accent: var(--tf-accent-violet);
   --tf-border: 3px solid var(--tf-black);
   --tf-border-thin: 2px solid var(--tf-black);
   --tf-shadow: 6px 6px 0 var(--tf-black);
@@ -18,6 +23,20 @@
   --tf-shadow-tiny: 3px 3px 0 var(--tf-black);
   --tf-font-display: "Space Grotesk", "Archivo Black", "Arial Black", sans-serif;
   --tf-font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --tf-bg: #0f1115;
+  --tf-panel: #171a1f;
+  --tf-white: #1f232a;
+  --tf-black: #f2f3f5;
+  --tf-ink-soft: #d7dae0;
+  --tf-muted: #9aa3ad;
+  --tf-pink: #ff7bad;
+  --tf-blue: #7ea6ff;
+  --tf-green: #7ee2a0;
+  --tf-red: #ff7b7b;
 }
 
 * {

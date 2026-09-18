@@ -1,11 +1,17 @@
 from django.contrib import admin
+from django.templatetags.static import static
 from django.urls import include, path
+from django.views.generic import RedirectView
 
 from . import views
 from tasks import views as task_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path(
+        "favicon.ico",
+        RedirectView.as_view(url=static("images/favicon.png"), permanent=True),
+    ),
     path("accounts/", include("users.urls")),
     path("projects/", include("projects.urls")),
     path("tasks/", task_views.AllTasksBoardView.as_view(), name="tasks-board"),

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Access denied" %} — TaskForge{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <section class="tf-card tf-card-accent-yellow" aria-labelledby="denied-heading">
+      <p class="tf-eyebrow">403</p>
+      <h1 id="denied-heading" class="h3">{% trans "Access denied" %}</h1>
+      <p class="tf-muted small">{% trans "You do not have permission to view this page." %}</p>
+      <a class="tf-btn tf-btn-primary w-100 mt-3" href="{% url 'home' %}">{% trans "Back to the dashboard" %}</a>
+    </section>
+  </div>
+</div>
+{% endblock %}

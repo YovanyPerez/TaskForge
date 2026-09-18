@@ -17,17 +17,27 @@
     }
   }
 
+  function theme() {
+    return current("tf-theme", "light") === "dark" ? "dark" : "light";
+  }
+
+  function check(selector, value) {
+    document.querySelectorAll(selector).forEach(function (el) {
+      el.checked = el.value === value;
+    });
+  }
+
   function apply() {
-    var accent = current("tf-accent", "yellow");
+    var accent = current("tf-accent", "violet");
     var density = current("tf-density", "comfortable");
+    var mode = theme();
     root.setAttribute("data-accent", accent);
     root.setAttribute("data-density", density);
-    document.querySelectorAll("[data-tf-accent-option]").forEach(function (el) {
-      el.checked = el.value === accent;
-    });
-    document.querySelectorAll("[data-tf-density-option]").forEach(function (el) {
-      el.checked = el.value === density;
-    });
+    root.setAttribute("data-theme", mode);
+    root.setAttribute("data-bs-theme", mode);
+    check("[data-tf-accent-option]", accent);
+    check("[data-tf-density-option]", density);
+    check("[data-tf-theme-option]", mode);
   }
 
   document.addEventListener("change", function (event) {
@@ -37,6 +47,9 @@
       apply();
     } else if (el.matches("[data-tf-density-option]")) {
       store("tf-density", el.value);
+      apply();
+    } else if (el.matches("[data-tf-theme-option]")) {
+      store("tf-theme", el.value);
       apply();
     }
   });

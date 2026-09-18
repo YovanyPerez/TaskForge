@@ -25,12 +25,19 @@
       <h2 id="appearance-heading" class="h4">{% trans "Appearance" %}</h2>
       <p class="tf-muted small">{% trans "Saved in this browser only." %}</p>
       <fieldset class="mb-3">
+        <legend class="tf-eyebrow">{% trans "Theme" %}</legend>
+        <div class="d-flex flex-wrap gap-2" role="radiogroup" aria-label="{% trans "Theme" %}">
+          <label class="tf-badge"><input type="radio" name="tf-theme" value="light" data-tf-theme-option class="me-1"> {% trans "Light" %}</label>
+          <label class="tf-badge"><input type="radio" name="tf-theme" value="dark" data-tf-theme-option class="me-1"> {% trans "Dark" %}</label>
+        </div>
+      </fieldset>
+      <fieldset class="mb-3">
         <legend class="tf-eyebrow">{% trans "Accent color" %}</legend>
         <div class="d-flex flex-wrap gap-2" role="radiogroup" aria-label="{% trans "Accent color" %}">
-          <label class="tf-badge"><input type="radio" name="tf-accent" value="yellow" data-tf-accent-option class="me-1"> {% trans "Yellow" %}</label>
-          <label class="tf-badge"><input type="radio" name="tf-accent" value="blue" data-tf-accent-option class="me-1"> {% trans "Blue" %}</label>
-          <label class="tf-badge"><input type="radio" name="tf-accent" value="pink" data-tf-accent-option class="me-1"> {% trans "Pink" %}</label>
-          <label class="tf-badge"><input type="radio" name="tf-accent" value="green" data-tf-accent-option class="me-1"> {% trans "Green" %}</label>
+          <label class="tf-badge"><input type="radio" name="tf-accent" value="violet" data-tf-accent-option class="me-1"> {% trans "Violet" %}</label>
+          <label class="tf-badge"><input type="radio" name="tf-accent" value="cyan" data-tf-accent-option class="me-1"> {% trans "Cyan" %}</label>
+          <label class="tf-badge"><input type="radio" name="tf-accent" value="magenta" data-tf-accent-option class="me-1"> {% trans "Magenta" %}</label>
+          <label class="tf-badge"><input type="radio" name="tf-accent" value="orange" data-tf-accent-option class="me-1"> {% trans "Orange" %}</label>
         </div>
       </fieldset>
       <fieldset>

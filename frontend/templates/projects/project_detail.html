@@ -48,7 +48,7 @@
       {% endif %}
       <ul class="list-unstyled mb-0 d-grid gap-2">
         {% for member in project.members.all %}
-          <li class="d-flex align-items-center gap-2 border border-2 border-dark p-2 bg-white">
+          <li class="d-flex align-items-center gap-2 tf-list-item p-2">
             <span class="tf-avatar tf-avatar-sm" aria-hidden="true">{{ member.username|slice:":2"|upper }}</span>
             <span>
               <strong class="d-block lh-1">{{ member.username }}</strong>
