@@ -56,6 +56,61 @@ Las cuentas nuevas deben ser aprobadas por un administrador antes del primer
 inicio de sesión (ver
 [Cuentas y recuperación de contraseña](#cuentas-y-recuperación-de-contraseña)).
 
+## Guía de uso
+
+Capturas de la aplicación en funcionamiento (interfaz en español, datos de
+ejemplo).
+
+### Acceso y cuentas
+
+| Inicio de sesión | Registro |
+| --- | --- |
+| ![Inicio de sesión](docs/screenshots/01-login.png) | ![Registro](docs/screenshots/02-registro.png) |
+| Inicio de sesión con usuario y contraseña. Tras 5 fallos, `django-axes` bloquea esa cuenta e IP durante 30 minutos. | El registro crea la cuenta **inactiva**; un administrador la aprueba desde `/admin`. |
+
+| Recuperar contraseña | Página no encontrada |
+| --- | --- |
+| ![Recuperar contraseña](docs/screenshots/13-recuperar.png) | ![Página no encontrada](docs/screenshots/14-404.png) |
+| Se envía un enlace de restablecimiento por correo (no revela si la cuenta existe). | Página 404 con el estilo de la aplicación. |
+
+### Panel y proyectos
+
+| Panel | Proyectos |
+| --- | --- |
+| ![Panel](docs/screenshots/03-panel.png) | ![Proyectos](docs/screenshots/04-proyectos.png) |
+| Resumen de proyectos, tareas, comentarios, vencidas y trabajo asignado. | Lista de proyectos visibles para el usuario, con su estado. |
+
+| Crear proyecto | Detalle de proyecto |
+| --- | --- |
+| ![Nuevo proyecto](docs/screenshots/05-proyecto-nuevo.png) | ![Detalle de proyecto](docs/screenshots/06-proyecto-detalle.png) |
+| Al crear un proyecto ya se pueden elegir los miembros iniciales. | Miembros, tareas y accesos de gestión del proyecto. |
+
+### Tareas
+
+| Tablero global | Detalle de tarea |
+| --- | --- |
+| ![Tablero de tareas](docs/screenshots/07-tareas.png) | ![Detalle de tarea](docs/screenshots/08-tarea-detalle.png) |
+| Todas las tareas de los proyectos visibles. | Estado, prioridad, asignación y comentarios. |
+
+### Equipo e informes
+
+| Equipo | Informes |
+| --- | --- |
+| ![Equipo](docs/screenshots/09-equipo.png) | ![Informes](docs/screenshots/10-reportes.png) |
+| Directorio del equipo; bajo cada tarjeta, los proyectos en los que trabaja. | Salud de proyectos, tareas por estado/prioridad y carga del equipo. |
+
+### Ajustes, notificaciones y tema oscuro
+
+| Ajustes | Notificaciones |
+| --- | --- |
+| ![Ajustes](docs/screenshots/11-ajustes.png) | ![Notificaciones](docs/screenshots/12-notificaciones.png) |
+| Idioma, tema (Claro/Oscuro) y color de acento; se guardan en el navegador. | Campana con las novedades sin leer. |
+
+| Panel en oscuro | Ajustes en oscuro |
+| --- | --- |
+| ![Panel en tema oscuro](docs/screenshots/15-panel-oscuro.png) | ![Ajustes en tema oscuro](docs/screenshots/16-ajustes-oscuro.png) |
+| El tema oscuro se elige en Ajustes → Apariencia. | Los acentos no coinciden con los colores de estado, así no confunden. |
+
 ## Stack tecnológico
 
 - **Backend**: Python 3.12, Django 5.2 LTS, Django REST Framework
